@@ -1,0 +1,9 @@
+Package: mlyx.neteasemusiclyric
+Name: NeteaseMusicLyric
+Depends: mobilesubstrate, mlyx.wallpaperchanger
+Version: 3.0
+Architecture: iphoneos-arm
+Description: Display NeteaseMusic Lyric and Album Artwork in HomeScreen(iOS13 arm64e Only). Double-Tap StatusBar to start or end Lyric and Wallpaper. Please prepare your default wallpaper in /var/mobile/Documents/Wallpaper.jpg. When you end this tweak, Lyric Window will disappear and your default Wallpaper will be set. if you do not set default wallpaper, your wallpaper will be the last song's album artwork.
+Maintainer: mlyx
+Author: mlyx
+Section: Tweaks
