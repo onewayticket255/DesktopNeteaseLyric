@@ -16,13 +16,16 @@ Show Netease Music Lyric and Album Artwork in Jailbroken iOS Device SpringBoard
 <img src="https://raw.githubusercontent.com/onewayticket255/DesktopNeteaseLyric/master/setting.png" alt="Your image title" width="200"/>
 
 ## Configure 
-Please prepare your default wallpaper in `/var/mobile/Documents/Wallpaper`.jpg. When you DoubleTap Statusbar to end this tweak, LyricWindow will disappear and your default Wallpaper will be set. If you do not set default wallpaper, your wallpaper will be the last song's album artwork.
+Please prepare your default wallpaper in `/var/mobile/Documents/Wallpaper.jpg`. When you DoubleTap Statusbar to end this tweak, LyricWindow will disappear and your default Wallpaper will be set. If you do not set default wallpaper, your wallpaper will be the last song's album artwork.
 
 ## Install
 Add repo: https://mlyxshi.github.io/repo
 
 ## More
 [Makito](https://keep.moe/2019/05/16/netease-now-playing-lldb/)
+
 [JunesiPhone](https://github.com/JunesiPhone/XenInfo)
+
 [Lakr](https://lab.qaq.wiki/Lakr233/ilrcoverlay)
+
 [My Blog](https://mlyxshi.github.io/blog/2020/03/11/neteaselyric/)
