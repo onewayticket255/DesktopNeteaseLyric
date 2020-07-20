@@ -7,6 +7,8 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Show Lyric</string>
 		</dict>
 
 		<dict>
@@ -46,10 +48,85 @@
 			<true/>
 		</dict>
 
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>SpringBoard Extra</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>mlyx.neteaselyricsetting</string>
+			<key>key</key>
+			<string>isCCArtworkEnabled</string>
+			<key>label</key>
+			<string>CCArtwork</string>
+		</dict>
+
+
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>mlyx.neteaselyricsetting</string>
+			<key>key</key>
+			<string>isMusicBeQuietEnabled</string>
+			<key>label</key>
+			<string>MusicBeQuiet</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>mlyx.neteaselyricsetting</string>
+			<key>key</key>
+			<string>isQuitAllEnabled</string>
+			<key>label</key>
+			<string>QuitAll</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>mlyx.neteaselyricsetting</string>
+			<key>key</key>
+			<string>isCleanSpringBoardEnabled</string>
+			<key>label</key>
+			<string>CleanSpringBoard</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>mlyx.neteaselyricsetting</string>
+			<key>key</key>
+			<string>isCompactMediaPlayerEnabled</string>
+			<key>label</key>
+			<string>CompactMediaPlayer</string>
+		</dict>
+
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 		</dict>
+
 
 	 
 		<dict>

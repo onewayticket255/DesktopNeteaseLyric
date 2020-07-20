@@ -1,4 +1,6 @@
 #define DEVICE_WIDTH  [[UIScreen mainScreen] bounds].size.width
+#define LYRIC_WIDTH  36
+
 #import <rocketbootstrap/rocketbootstrap.h>
 #import <AppSupport/CPDistributedMessagingCenter.h>
 #import "MediaRemote.h"
@@ -29,9 +31,9 @@ static NSMutableDictionary *settings;
    self = [super init];
    if(self){
 
-    LyricWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0,LYRIC_Y,DEVICE_WIDTH,36)];
-    LyricOriginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,DEVICE_WIDTH,18)];
-    LyricTranslateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,18,DEVICE_WIDTH,18)];
+    LyricWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0,LYRIC_Y,DEVICE_WIDTH,LYRIC_WIDTH)];
+    LyricOriginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,DEVICE_WIDTH,LYRIC_WIDTH/2)];
+    LyricTranslateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,LYRIC_WIDTH/2,DEVICE_WIDTH,LYRIC_WIDTH/2)];
   
     [LyricOriginLabel setText:@"Lyric Start"];
     [LyricOriginLabel setFont:[UIFont boldSystemFontOfSize:14]];
@@ -65,19 +67,14 @@ static NSMutableDictionary *settings;
 
 
 - (void)SingleTap:(id)gestureRecognizer {    
-    if(gestureRecognizer) {
-        CGPoint loc=[gestureRecognizer locationInView:LyricOriginLabel];
-	    if((double)loc.x<DEVICE_WIDTH*1/3){
-            NSLog(@"mlyx debug, left");
-            MRMediaRemoteSendCommand(kMRPreviousTrack, 0);
-        }else if((double)loc.x<DEVICE_WIDTH*2/3){
-            NSLog(@"mlyx debug, center");
-            MRMediaRemoteSendCommand(kMRTogglePlayPause, 0);
-        }else{
-            NSLog(@"mlyx debug, right");
-            MRMediaRemoteSendCommand(kMRNextTrack, 0);
-        }      
-	}
+    CGPoint loc=[gestureRecognizer locationInView:LyricOriginLabel];
+	if((double)loc.x<DEVICE_WIDTH*1/3){
+        MRMediaRemoteSendCommand(kMRPreviousTrack, 0);
+    }else if((double)loc.x<DEVICE_WIDTH*2/3){
+        MRMediaRemoteSendCommand(kMRTogglePlayPause, 0);
+    }else{
+        MRMediaRemoteSendCommand(kMRNextTrack, 0);
+    }      	
 }
 
 - (void)LongPress{    

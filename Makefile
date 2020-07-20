@@ -6,15 +6,12 @@ INSTALL_TARGET_PROCESSES = SpringBoard
 include $(THEOS)/makefiles/common.mk
 
 
-TWEAK_NAME = SpringboardLyric
-
-SpringboardLyric_FILES = Tweak.xm
-SpringboardLyric_CFLAGS = -fobjc-arc
-SpringboardLyric_LIBRARIES= rocketbootstrap
-SpringboardLyric_PRIVATE_FRAMEWORKS = AppSupport MediaRemote
-
+TWEAK_NAME = NeteaseSpringBoardLyric
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 SUBPROJECTS += NeteaseMusicLyric
 SUBPROJECTS += NeteaseLyricSetting
+SUBPROJECTS += CleanNeteaseMusic
+SUBPROJECTS += SpringBoardExtra
+SUBPROJECTS += SpringBoardLyric
 include $(THEOS_MAKE_PATH)/aggregate.mk
