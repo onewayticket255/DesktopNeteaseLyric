@@ -1,7 +1,5 @@
 ARCHS = arm64e
 TARGET = iphone:latest:13
-INSTALL_TARGET_PROCESSES = com.netease.cloudmusic
-
 
 include $(THEOS)/makefiles/common.mk
 

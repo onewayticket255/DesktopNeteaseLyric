@@ -1,11 +1,9 @@
-@interface NMSettingBallView:UIView
-@end
-
 @interface NMTabBar:UIView
 @end
 
 @interface ATScrollView:UIScrollView
 @end
+
 
 //屏蔽无用网络请求
 %hook NMUploadLogRequest
@@ -18,6 +16,20 @@
 }
 %end
 
+%hook NMRealTimeLogRequest 
+//  feedback/weblog
+-(id)initWithAction:(id)arg2 log:(id)arg3 {
+    return nil;
+}
+%end
+
+%hook NMPollingRequest 
+//  pl/count
+-(id)init {
+    return nil;
+}
+%end
+
 %hook NMUserSafePollingRequest 
 //  usersafe/pl/count
 -(id)init {
@@ -25,11 +37,65 @@
 }
 %end
 
+%hook  NMStartupAdvertisementShowRequest 
+// ad/monitor/impress
+-(id)initWithAdvertisement:(id)arg2 {
+	return nil;
+}
+%end
 
-%hook NMPollingRequest 
-//  pl/count
+%hook NMAdvertisementFetchRequest 
+// ad/get
+-(id)initWithTypeIdPairList:(id)arg2 otherParams:(id)arg3 {
+	return nil;
+}
+%end
+
+
+%hook NMRefreshStartupIntervalRequest 
+//  ad/config
 -(id)init {
-    return nil;
+	return nil;
+}
+%end
+
+
+%hook NMStartupAdvertisementPreFetchRequest 
+// ad/loading/get
+-(id)init {
+	return nil;
+}
+%end
+
+
+
+%hook NMAdvertisementFetchConfigRequest
+// ad/commonconfig
+-(id)init {
+	return nil;
+}
+%end
+
+
+%hook NMPlayerViewADConfRequest
+// ad/config/get
+-(id)init {
+	return nil;
+}
+%end
+
+
+%hook MAMDNSServerFinder 
+// nstool.netease.com
++(void)startNSInfoCompleteHandler:(id)arg2 {
+}
+%end
+
+
+%hook NMSearchPopularRequest 
+// hot/search
+-(id)init {
+	return nil;
 }
 %end
 
@@ -41,44 +107,15 @@
 %end
 
 
-%hook NMStartupAdvertisementPreFetchRequest
--(id)init{
-// ad/loading
-	return nil;
-}
-%end
 
-
-%hook NMAdvertisementFetchRequest
--(id)initWithTypeIdPairList:(void *)arg2 {
-// ad/get
-	return nil;
-}
-%end
-
-
-//hide 无用信息
-%hook NMSettingBallView
-- (void)layoutSubviews{
-   %orig;
-	for(UIView *subview in [self subviews]){
-      if([subview isKindOfClass: %c(UILabel)]){
-        	UILabel *label=(UILabel *)subview;
-         	if([label.text isEqualToString:@"商城"]||[label.text isEqualToString:@"有票"]||[label.text isEqualToString:@"个性换肤"]){
-            	self.hidden=1;
-         	}
-        }
-    }
-}
-%end
-
+//底栏
 %hook NMTabBar
 - (void)layoutSubviews{
    %orig;
 	for(UIView *subview in [self subviews]){
       	if([subview isKindOfClass: %c(UILabel)]){
          	UILabel *label=(UILabel *)subview;
-         	if([label.text isEqualToString:@"视频"]||[label.text isEqualToString:@"朋友"]){
+         	if([label.text isEqualToString:@"视频"]||[label.text isEqualToString:@"云村"]){
             	label.hidden=1;
          	}
         }
@@ -104,32 +141,26 @@
 }
 %end
 
-%hook NMDiscoverRecommendViewController
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-   return indexPath.section==0&&indexPath.row==0?%orig:0;
-}
 
-- (void)loadBanner{
-}
-
-- (void)doLoadBanner{
-}
-%end
-
+//搜索ad
 %hook NMSearchViewController
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-   return indexPath.section==2?%orig:0;
+- (void)loadAds{
+
 }
 %end
 
+
+
+//搜索placeholder
 %hook NMNavigationSearchBarView
 - (void)setPlaceHolder:(id)arg1  enablesReturnKey:(BOOL)arg2 {
 }
 %end
 
-%hook NMAdBackgroundView
-- (id)initWithFrame:(struct CGRect)arg1{
-return nil;
+//Splash Ad
+%hook NMLaunchAdViewController
+- (id)init{
+	return nil;
 }
 %end
 
@@ -140,3 +171,4 @@ return nil;
 	self.userInteractionEnabled=0;
 }
 %end
+

@@ -8,6 +8,8 @@
 static int isEnabled;
 static CGFloat LYRIC_Y;   //xs max = 860
 static NSMutableDictionary *settings;
+static bool TranslateOrRoma = 1;
+
 
 @interface UIApplication ()
 - (BOOL)launchApplicationWithIdentifier:(id)arg1 suspended:(BOOL)arg2;
@@ -21,6 +23,7 @@ static NSMutableDictionary *settings;
 }
 - (id)init;
 - (void)SingleTap:(id)arg1;
+- (void)DoubleTap;
 - (void)LongPress;
 - (void)updateLyric:(NSString*)origin withTranslate:(NSString*)translate;
 - (void)setHidden:(BOOL)arg1;
@@ -52,15 +55,20 @@ static NSMutableDictionary *settings;
     [LyricWindow setUserInteractionEnabled:YES];
 
    
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(SingleTap:)];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SingleTap:)];
 	[tapGesture setNumberOfTapsRequired: 1];
 
-    UILongPressGestureRecognizer *holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(LongPress)];
+    UITapGestureRecognizer *doubletapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(DoubleTap)];
+	[doubletapGesture setNumberOfTapsRequired: 2];
+
+    [tapGesture requireGestureRecognizerToFail:doubletapGesture];
+
+    UILongPressGestureRecognizer *holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action: @selector(LongPress)];
 
     
 	[LyricWindow addGestureRecognizer: tapGesture];
+    [LyricWindow addGestureRecognizer: doubletapGesture];
     [LyricWindow addGestureRecognizer: holdGesture];
-
    }
    return self;
 }
@@ -77,6 +85,10 @@ static NSMutableDictionary *settings;
     }      	
 }
 
+- (void)DoubleTap{    
+    TranslateOrRoma=!TranslateOrRoma;
+}
+
 - (void)LongPress{    
     [[UIApplication sharedApplication] launchApplicationWithIdentifier: @"com.netease.cloudmusic" suspended: NO];
 }
@@ -89,6 +101,7 @@ static NSMutableDictionary *settings;
 - (void)updateLyric:(NSString*)origin withTranslate:(NSString*)translate{
   	LyricOriginLabel.text=origin;
     LyricTranslateLabel.text=translate;
+
 }
 
 @end
@@ -113,7 +126,11 @@ static Lyric* LyricObject;
 - (NSDictionary *)handleMessageNamed:(NSString *)name withUserInfo:(NSDictionary *)userInfo {
 	NSString* lrc_origin=userInfo[@"lrc_origin"];
 	NSString* lrc_translate=userInfo[@"lrc_translate"];
-    [LyricObject updateLyric:lrc_origin withTranslate:lrc_translate];
+    NSString* lrc_roma=userInfo[@"lrc_romaji"];
+    
+    NSString* text=TranslateOrRoma?lrc_translate:lrc_roma;
+
+    [LyricObject updateLyric:lrc_origin withTranslate:text];
 	return nil;
 }
 %end
