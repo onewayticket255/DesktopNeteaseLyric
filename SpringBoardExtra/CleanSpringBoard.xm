@@ -1,27 +1,61 @@
 @interface SBIconListPageControl:UIView
 @end
 
+@interface MTLumaDodgePillView:UIView
+@end
+
+@interface CSTeachableMomentsContainerView:UIView
+@end
+
+@interface NCNotificationListSectionRevealHintView:UIView
+@end
+
 %group CleanSpringBoard
+
+    //iPhoneX home indicator
+	%hook MTLumaDodgePillView
+	-(void)layoutSubviews
+	{
+		%orig;
+		[self removeFromSuperview];
+	}
+    %end
+
+    //Dock 透明
 	%hook SBDockView
 	- (void)setBackgroundAlpha:(double)arg1{
 		%orig(0);
 	}
 	%end
 
+    //homescreen翻页点
 	%hook SBIconListPageControl
 	-(void)layoutSubviews{
 		%orig;
-		self.hidden=1;
-		self.userInteractionEnabled=0;
+		[self removeFromSuperview];
 	}
 
 	%end
 
-	%hook SBHomeGrabberView
-    - (void)setHidden:(BOOL)arg1 forReason:(id)arg2 withAnimationSettings:(id)arg3 {
-        %orig(YES, arg2, arg3);
-    }
-%end
+    //swipe up tip && ControlCenterGrabber
+	%hook CSTeachableMomentsContainerView
+	-(void)layoutSubviews{
+		%orig;
+		[self removeFromSuperview];
+	}
+	%end
+
+    //No Old Notifications in LC
+	%hook NCNotificationListSectionRevealHintView
+	-(void)layoutSubviews{
+		%orig;
+		[self removeFromSuperview];
+	}
+	%end
+
+
+
+
 %end
 
 %ctor{

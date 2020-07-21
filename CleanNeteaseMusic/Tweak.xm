@@ -116,12 +116,12 @@
       	if([subview isKindOfClass: %c(UILabel)]){
          	UILabel *label=(UILabel *)subview;
          	if([label.text isEqualToString:@"视频"]||[label.text isEqualToString:@"云村"]){
-            	label.hidden=1;
+			   [subview removeFromSuperview];    
          	}
         }
 
         if([subview class]== %c(NMTabBadgeView)){
-         	subview.hidden=1;         
+     		 [subview removeFromSuperview];       
         }
 
       	if([subview isKindOfClass: %c(UIImageView)]){
@@ -132,7 +132,7 @@
          	if(imageAsset){       
             	NSString* assetName=MSHookIvar<NSString*> (imageAsset, "_assetName");
             	if([assetName isEqualToString:@"cm6_btm_icn_video"]||[assetName isEqualToString:@"cm6_btm_icn_friend"]){
-               		imageview.hidden=1;
+					[subview removeFromSuperview];    
             	}          
          	}
         }
@@ -171,4 +171,3 @@
 	self.userInteractionEnabled=0;
 }
 %end
-

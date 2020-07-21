@@ -1,4 +1,8 @@
 #import "MediaRemote.h"
+@interface SBMediaController : NSObject
+@property (nonatomic, weak,readonly) id nowPlayingApplication;
++(id)sharedInstance;
+@end
 
 @interface CCUIContentModuleContentContainerView : UIView
 @property (assign,nonatomic) double compactContinuousCornerRadius;
