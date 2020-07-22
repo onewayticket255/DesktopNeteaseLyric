@@ -19,7 +19,7 @@
     - (CGRect)_suggestedFrameForMediaControls
     {
         CGRect frame = %orig;
-            frame.size.height = 107;
+        frame.size.height = 107;
         return frame;
     }
     %end

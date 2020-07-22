@@ -41,11 +41,13 @@
 			<key>key</key>
 			<string>Y-Axis</string>
 			<key>max</key>
-			<integer>1000</integer>
+			<integer>896</integer>
 			<key>min</key>
 			<integer>0</integer>
 			<key>showValue</key>
 			<true/>
+			<key>PostNotification</key>
+            <string>mlyx.neteaselyricsetting/Y-AxisChanged</string>
 		</dict>
 
 

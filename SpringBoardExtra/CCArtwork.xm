@@ -38,6 +38,7 @@ viewDidAppear
             notificationCenter = [NSNotificationCenter defaultCenter];
             [notificationCenter addObserver:self selector:@selector(updateImage:) name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification object:nil];
             [notificationCenter postNotificationName:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification object:nil];
+             [notificationCenter addObserver:self selector:@selector(NowPlayingApplicationDidChange:) name:(__bridge NSString *)kMRMediaRemoteNowPlayingApplicationDidChangeNotification object:nil];
             if (imageView == nil) {
                 imageView = [[UIImageView alloc] initWithFrame:self.contentViewController.view.bounds];
                 imageView.layer.cornerRadius = self.moduleContentView.compactContinuousCornerRadius;
@@ -54,6 +55,7 @@ viewDidAppear
             [self updateExpanded];
         }
     }
+
 
     %new
     -(void)updateExpanded {
@@ -79,14 +81,21 @@ viewDidAppear
     });
     }
 
-    -(void)viewWillDisappear:(BOOL)disappear {
-        %orig;
-        if ([self.moduleIdentifier isEqualToString:@"com.apple.mediaremote.controlcenter.nowplaying"]) {
-            [notificationCenter removeObserver:self name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification object:nil];
-        }
+    %new
+   //autohide
+    -(void)NowPlayingApplicationDidChange:(NSNotification *)notification {  
+
+        NSString *appName =[notification.userInfo  objectForKey:@"kMRMediaRemoteNowPlayingApplicationDisplayNameUserInfoKey"];
+        // NSLog(@"mlyx noti1 %@",notification.userInfo);
+        // NSLog(@"mlyx noti2 %@",appName);
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [imageView setHidden:!appName];
+        });
     }
 
-    %end
+ %end
+
 
 %end
 

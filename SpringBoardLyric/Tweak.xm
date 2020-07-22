@@ -6,13 +6,20 @@
 #import "MediaRemote.h"
 
 static int isEnabled;
+NSUserDefaults *defaults;
 static CGFloat LYRIC_Y;   //xs max = 860
 static NSMutableDictionary *settings;
 static bool TranslateOrRoma = 1;
+static bool isNeteaseOn =0;
 
 
 @interface UIApplication ()
 - (BOOL)launchApplicationWithIdentifier:(id)arg1 suspended:(BOOL)arg2;
+@end
+
+@interface NSUserDefaults ()
+- (id)objectForKey:(NSString *)key inDomain:(NSString *)domain;
+- (void)setObject:(id)value forKey:(NSString *)key inDomain:(NSString *)domain;
 @end
 
 @interface Lyric: NSObject
@@ -26,7 +33,9 @@ static bool TranslateOrRoma = 1;
 - (void)DoubleTap;
 - (void)LongPress;
 - (void)updateLyric:(NSString*)origin withTranslate:(NSString*)translate;
+- (void)updateFrame:(CGRect)arg1;
 - (void)setHidden:(BOOL)arg1;
+- (NSString*)getLyric;
 @end
 
 @implementation Lyric
@@ -50,8 +59,9 @@ static bool TranslateOrRoma = 1;
 	[LyricWindow addSubview:LyricOriginLabel];
     [LyricWindow addSubview:LyricTranslateLabel];
 
-    [LyricWindow setWindowLevel:100000];
-    [LyricWindow setHidden:NO];
+    //UIWindowLevelNormal = 0 UIWindowLevelStatusBar = 1000 UIWindowLevelAlert = 2000  
+    [LyricWindow setWindowLevel:2000];
+    [LyricWindow setHidden:0];
     [LyricWindow setUserInteractionEnabled:YES];
 
    
@@ -101,8 +111,21 @@ static bool TranslateOrRoma = 1;
 - (void)updateLyric:(NSString*)origin withTranslate:(NSString*)translate{
   	LyricOriginLabel.text=origin;
     LyricTranslateLabel.text=translate;
-
 }
+
+- (void)updateFrame:(CGRect) arg1{
+    [LyricWindow setHidden:0];
+    LyricWindow.frame=arg1;
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [LyricWindow setHidden:!isNeteaseOn];
+    });
+}
+
+- (NSString*)getLyric{
+    return LyricOriginLabel.text;
+}
+
 
 @end
 
@@ -116,12 +139,38 @@ static Lyric* LyricObject;
 		LyricObject =  [[Lyric alloc] init];
     }
 
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        if ([[LyricObject getLyric] isEqualToString:@"Lyric Start"]) {
+            [LyricObject setHidden:1];
+        }
+    });
+
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(NowPlayingApplicationDidChange:) name:(__bridge NSString *)kMRMediaRemoteNowPlayingApplicationDidChangeNotification object:nil];
+
+
 	CPDistributedMessagingCenter *c=[CPDistributedMessagingCenter centerNamed:@"mlyx.neteasemusiclyric"];
 	rocketbootstrap_distributedmessagingcenter_apply(c);
 	[c runServerOnCurrentThread];
 	[c registerForMessageName:@"LyricChange" target:self selector:@selector(handleMessageNamed:withUserInfo:)];
 	
 }
+
+%new
+//autohide
+-(void)NowPlayingApplicationDidChange:(NSNotification *)notification {  
+
+    NSString *appName =[notification.userInfo  objectForKey:@"kMRMediaRemoteNowPlayingApplicationDisplayNameUserInfoKey"];
+    NSLog(@"mlyx noti1 %@",notification.userInfo);
+    NSLog(@"mlyx noti2 %@",appName);
+
+    isNeteaseOn=[appName isEqualToString:@"NetEase Music"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+       [LyricObject setHidden:!isNeteaseOn];
+    });
+
+}
+
 %new
 - (NSDictionary *)handleMessageNamed:(NSString *)name withUserInfo:(NSDictionary *)userInfo {
 	NSString* lrc_origin=userInfo[@"lrc_origin"];
@@ -131,10 +180,18 @@ static Lyric* LyricObject;
     NSString* text=TranslateOrRoma?lrc_translate:lrc_roma;
 
     [LyricObject updateLyric:lrc_origin withTranslate:text];
+
 	return nil;
 }
 %end
 
+
+
+static void updateLyricFrame() {
+    defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *d = (NSNumber *)[defaults objectForKey:@"Y-Axis" inDomain:@"mlyx.neteaselyricsetting"];
+    [LyricObject updateFrame:CGRectMake(0,[d doubleValue],DEVICE_WIDTH,LYRIC_WIDTH)];
+}
 
 
 %ctor{
@@ -143,8 +200,9 @@ static Lyric* LyricObject;
 
     NSString* Y_Axis=[settings objectForKey:@"Y-Axis"] ? [settings objectForKey:@"Y-Axis"]: @"50";
     LYRIC_Y=[Y_Axis doubleValue];
-
+    
     if(isEnabled){
-        %init(_ungrouped);
+        %init;
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)updateLyricFrame, CFSTR("mlyx.neteaselyricsetting/Y-AxisChanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
     }
 }
