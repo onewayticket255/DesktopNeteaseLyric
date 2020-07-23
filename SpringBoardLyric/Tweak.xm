@@ -179,6 +179,8 @@ static Lyric* LyricObject;
     
     NSString* text=TranslateOrRoma?lrc_translate:lrc_roma;
 
+    NSLog(@"mlyx_debig %@",lrc_origin);
+
     [LyricObject updateLyric:lrc_origin withTranslate:text];
 
 	return nil;
