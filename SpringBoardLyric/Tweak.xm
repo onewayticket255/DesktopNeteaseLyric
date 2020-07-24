@@ -13,6 +13,15 @@ static bool TranslateOrRoma = 1;
 static bool isNeteaseOn =0;
 
 
+@interface SBApplication : NSObject
+@property (nonatomic,readonly) NSString * bundleIdentifier;                                                                                   
+@end
+
+@interface SBMediaController : NSObject
+@property (nonatomic, weak,readonly) SBApplication * nowPlayingApplication;
++(id)sharedInstance;
+@end
+
 @interface UIApplication ()
 - (BOOL)launchApplicationWithIdentifier:(id)arg1 suspended:(BOOL)arg2;
 @end
@@ -48,11 +57,13 @@ static bool isNeteaseOn =0;
     LyricTranslateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,LYRIC_WIDTH/2,DEVICE_WIDTH,LYRIC_WIDTH/2)];
   
     [LyricOriginLabel setText:@"Lyric Start"];
+    [LyricOriginLabel setAdjustsFontSizeToFitWidth: YES];
     [LyricOriginLabel setFont:[UIFont boldSystemFontOfSize:14]];
     [LyricOriginLabel setTextAlignment:NSTextAlignmentCenter];
     [LyricOriginLabel setBackgroundColor:[[UIColor alloc] initWithRed:0 green:0 blue:0 alpha:0.233]];
 
     [LyricTranslateLabel setFont:[UIFont boldSystemFontOfSize:14]];
+    [LyricTranslateLabel setAdjustsFontSizeToFitWidth: YES];
     [LyricTranslateLabel setTextAlignment:NSTextAlignmentCenter];
     [LyricTranslateLabel setBackgroundColor:[[UIColor alloc] initWithRed:0 green:0 blue:0 alpha:0.233]];
 
@@ -100,7 +111,14 @@ static bool isNeteaseOn =0;
 }
 
 - (void)LongPress{    
-    [[UIApplication sharedApplication] launchApplicationWithIdentifier: @"com.netease.cloudmusic" suspended: NO];
+    NSString *nowPlayingID = [[[%c(SBMediaController) sharedInstance] nowPlayingApplication] bundleIdentifier];
+    if(nowPlayingID){
+        [[UIApplication sharedApplication] launchApplicationWithIdentifier:nowPlayingID suspended: NO];
+    }else{
+        //默认开启网易云
+        [[UIApplication sharedApplication] launchApplicationWithIdentifier:@"com.netease.cloudmusic" suspended: NO];
+    }
+    
 }
 
 - (void)setHidden:(BOOL)arg1{
@@ -153,7 +171,6 @@ static Lyric* LyricObject;
 	rocketbootstrap_distributedmessagingcenter_apply(c);
 	[c runServerOnCurrentThread];
 	[c registerForMessageName:@"LyricChange" target:self selector:@selector(handleMessageNamed:withUserInfo:)];
-	
 }
 
 %new
@@ -161,10 +178,10 @@ static Lyric* LyricObject;
 -(void)NowPlayingApplicationDidChange:(NSNotification *)notification {  
 
     NSString *appName =[notification.userInfo  objectForKey:@"kMRMediaRemoteNowPlayingApplicationDisplayNameUserInfoKey"];
-    NSLog(@"mlyx noti1 %@",notification.userInfo);
-    NSLog(@"mlyx noti2 %@",appName);
+    NSLog(@"mlyx NowPlayingApplicationDidChangeInfo %@",notification.userInfo);
+    NSLog(@"mlyx NowPlayingApplicationDidChangeAppName %@",appName);
 
-    isNeteaseOn=[appName isEqualToString:@"NetEase Music"];
+    isNeteaseOn=[appName isEqualToString:@"NetEase Music"]||[appName isEqualToString:@"QQMusic"];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
        [LyricObject setHidden:!isNeteaseOn];
     });
@@ -178,8 +195,6 @@ static Lyric* LyricObject;
     NSString* lrc_roma=userInfo[@"lrc_romaji"];
     
     NSString* text=TranslateOrRoma?lrc_translate:lrc_roma;
-
-    NSLog(@"mlyx_debig %@",lrc_origin);
 
     [LyricObject updateLyric:lrc_origin withTranslate:text];
 

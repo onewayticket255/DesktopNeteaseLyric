@@ -31,7 +31,7 @@
     NSString *lrc_origin = lrcObject.lyric;
 	NSString *lrc_translate = lrcObject.translatedLyric;
 	NSString *lrc_romaji = lrcObject.romajiLyric;
-    NSLog(@"mlyx_xxxx Index %lld  lrc %@  lrc_trans %@ lrc_romaji %@",arg1,lrc_origin,lrc_translate,lrc_romaji);
+    NSLog(@"mlyx_netease Index %lld  lrc %@  lrc_trans %@ lrc_romaji %@",arg1,lrc_origin,lrc_translate,lrc_romaji);
 
 	NSMutableDictionary *info=[NSMutableDictionary dictionary];
 	[info setObject:lrc_origin forKey:@"lrc_origin"];

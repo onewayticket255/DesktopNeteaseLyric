@@ -1,12 +1,12 @@
 Package: mlyx.neteasespringboardlyric
 Name: NeteaseSpringBoardLyric
-Version: 0.0.2
+Version: 0.0.4
 Architecture: iphoneos-arm
-Description: NeteaseMusic Lyric in HomeScreen(iOS13 arm64e Only)
+Description: NeteaseMusic&&QQMusic Lyric in HomeScreen(iOS13 arm64e Only)
 Maintainer: mlyx
 Author: mlyx
 Section: Tweaks
 Depends: mobilesubstrate,com.rpetrich.rocketbootstrap
-Depiction: https://mlyxshi.github.io/repo/depictions/NeteaseLyric/NeteaseLyric.html
+
 
 
