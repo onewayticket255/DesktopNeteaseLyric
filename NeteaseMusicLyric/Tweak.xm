@@ -1,7 +1,7 @@
 #import <rocketbootstrap/rocketbootstrap.h>
 #import <AppSupport/CPDistributedMessagingCenter.h>
 
-
+static NSString* lastLyric;
 @interface NMLyricModel
 @property(retain, nonatomic) NSMutableArray *lyricList;
 @property(nonatomic) _Bool hasRomaji; 
@@ -29,6 +29,12 @@
 	NMLyricObject *lrcObject = [lyricModel.lyricList objectAtIndex: arg1];
 
     NSString *lrc_origin = lrcObject.lyric;
+
+	if([lastLyric isEqualToString:lrc_origin])
+		return;
+	
+	lastLyric=lrc_origin;
+	
 	NSString *lrc_translate = lrcObject.translatedLyric;
 	NSString *lrc_romaji = lrcObject.romajiLyric;
     NSLog(@"mlyx_netease Index %lld  lrc %@  lrc_trans %@ lrc_romaji %@",arg1,lrc_origin,lrc_translate,lrc_romaji);

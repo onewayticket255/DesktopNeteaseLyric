@@ -1,6 +1,12 @@
 @interface NMTabBar:UIView
 @end
 
+@interface NMResourceRelateMomentCollectionViewCell:UIView
+@end
+
+@interface NMResourceCommentAdCell:UIView
+@end
+
 @interface ATScrollView:UIScrollView
 @end
 
@@ -164,6 +170,28 @@
 }
 %end
 
+//Comment Ad
+%hook NMResourceRelateMomentCollectionViewCell
+- (void)layoutSubviews{
+	[self removeFromSuperview];
+}
+- (struct CGSize)sizeThatFits:(struct CGSize)arg1{
+  return CGSizeMake(%orig.width,0);
+}
+- (struct CGSize)intrinsicContentSize{
+  return CGSizeMake(%orig.width,0);
+}
+%end
+
+%hook NMResourceCommentAdCell
+- (void)layoutSubviews{
+	[self removeFromSuperview];	
+}
++ (double)heightForComment:(id)arg1 component:(id)arg2{
+	return 0;
+}
+%end
+
 //播放界面防误触
 %hook ATScrollView
 - (void)layoutSubviews{
@@ -171,3 +199,11 @@
 	self.userInteractionEnabled=0;
 }
 %end
+
+%ctor{
+    NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/mlyx.neteaselyricsetting.plist"];
+    bool isCleanNeteaseMusicEnabled=[settings objectForKey:@"isCleanNeteaseMusicEnabled"] ? [[settings objectForKey:@"isCleanNeteaseMusicEnabled"] boolValue] : 1;
+    if(isCleanNeteaseMusicEnabled){
+        %init;
+    }
+}

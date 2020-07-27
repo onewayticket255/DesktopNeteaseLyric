@@ -1,6 +1,8 @@
 #import <rocketbootstrap/rocketbootstrap.h>
 #import <AppSupport/CPDistributedMessagingCenter.h>
 
+static NSString* lastLyric;
+
 @interface SongInfo
 - (NSString*)song_Name;
 @end
@@ -135,6 +137,11 @@ NSMutableDictionary* allLyrics=[NSMutableDictionary dictionaryWithCapacity:1024]
 
   MyLyric *lyricO=originLyricArray[currentOriginLyricIndex];
   NSString *lrc_origin = lyricO.text;
+
+  if([lastLyric isEqualToString:lrc_origin])
+    return;
+	
+	lastLyric=lrc_origin;
 
   MyLyric *lyricT;
   MyLyric *lyricR;
