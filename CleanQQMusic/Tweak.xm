@@ -52,6 +52,13 @@
 }
 %end
 
+%hook CPDADConfig
+-(bool)canShowAd{
+  return 0;
+}
+
+%end
+
 //我的 广告
 %hook QMMyMusicAdBannerCell
 + (double)cellHeight{
