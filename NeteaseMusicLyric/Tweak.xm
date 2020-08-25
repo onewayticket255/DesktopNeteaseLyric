@@ -1,5 +1,6 @@
-#import <rocketbootstrap/rocketbootstrap.h>
-#import <AppSupport/CPDistributedMessagingCenter.h>
+#import <MRYIPCCenter.h>
+
+MRYIPCCenter* center = [MRYIPCCenter centerNamed:@"mlyx.neteasemusiclyric"];
 
 static NSString* lastLyric;
 @interface NMLyricModel
@@ -44,8 +45,7 @@ static NSString* lastLyric;
     [info setObject:lrc_translate forKey:@"lrc_translate"];
 	[info setObject:lrc_romaji forKey:@"lrc_romaji"];
 
-	CPDistributedMessagingCenter *c=[CPDistributedMessagingCenter centerNamed:@"mlyx.neteasemusiclyric"];
-	rocketbootstrap_distributedmessagingcenter_apply(c);
-	[c sendMessageName:@"LyricChange" userInfo:info];
+	[center callExternalMethod:@selector(_updateLyric:) withArguments:info];
+
 }
 %end

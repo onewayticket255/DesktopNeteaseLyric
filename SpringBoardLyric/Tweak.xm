@@ -1,16 +1,17 @@
 #define DEVICE_WIDTH  [[UIScreen mainScreen] bounds].size.width
-#define LYRIC_WIDTH  36
+#define LYRIC_WIDTH  36 //iPhone X,iPhone XS 屏幕底部可利用高度
 
-#import <rocketbootstrap/rocketbootstrap.h>
-#import <AppSupport/CPDistributedMessagingCenter.h>
 #import "MediaRemote.h"
+#import <MRYIPCCenter.h>
 
 static int isEnabled;
-NSUserDefaults *defaults;
-static CGFloat LYRIC_Y;   //xs max = 860
+static CGFloat LYRIC_Y;   //xs max = 860, x = 776
 static NSMutableDictionary *settings;
 static bool TranslateOrRoma = 1;
 static bool isNeteaseOn =0;
+
+NSUserDefaults *defaults;
+MRYIPCCenter* center;
 
 
 @interface SBApplication : NSObject
@@ -167,10 +168,21 @@ static Lyric* LyricObject;
     [notificationCenter addObserver:self selector:@selector(NowPlayingApplicationDidChange:) name:(__bridge NSString *)kMRMediaRemoteNowPlayingApplicationDidChangeNotification object:nil];
 
 
-	CPDistributedMessagingCenter *c=[CPDistributedMessagingCenter centerNamed:@"mlyx.neteasemusiclyric"];
-	rocketbootstrap_distributedmessagingcenter_apply(c);
-	[c runServerOnCurrentThread];
-	[c registerForMessageName:@"LyricChange" target:self selector:@selector(handleMessageNamed:withUserInfo:)];
+    center = [MRYIPCCenter centerNamed:@"mlyx.neteasemusiclyric"];
+    [center addTarget:self action:@selector(_updateLyric:)];
+}
+
+%new
+- (void)_updateLyric:(NSDictionary *)args{
+	NSString* lrc_origin=args[@"lrc_origin"];
+	NSString* lrc_translate=args[@"lrc_translate"];
+    NSString* lrc_roma=args[@"lrc_romaji"];
+  
+    NSString* text=TranslateOrRoma?lrc_translate:lrc_roma;
+
+    dispatch_async(dispatch_get_main_queue(), ^{   
+        [LyricObject updateLyric:lrc_origin withTranslate:text];
+    }); 
 }
 
 %new
@@ -182,24 +194,14 @@ static Lyric* LyricObject;
     NSLog(@"mlyx NowPlayingApplicationDidChangeAppName %@",appName);
 
     isNeteaseOn=[appName isEqualToString:@"NetEase Music"]||[appName isEqualToString:@"QQMusic"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{   
        [LyricObject setHidden:!isNeteaseOn];
     });
 
 }
 
-%new
-- (NSDictionary *)handleMessageNamed:(NSString *)name withUserInfo:(NSDictionary *)userInfo {
-	NSString* lrc_origin=userInfo[@"lrc_origin"];
-	NSString* lrc_translate=userInfo[@"lrc_translate"];
-    NSString* lrc_roma=userInfo[@"lrc_romaji"];
-    
-    NSString* text=TranslateOrRoma?lrc_translate:lrc_roma;
 
-    [LyricObject updateLyric:lrc_origin withTranslate:text];
-
-	return nil;
-}
 %end
 
 

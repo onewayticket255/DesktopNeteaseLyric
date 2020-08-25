@@ -4,7 +4,6 @@ TWEAK_NAME = QQMusicLyric
 
 QQMusicLyric_FILES = Tweak.xm
 QQMusicLyric_CFLAGS = -fobjc-arc
-QQMusicLyric_LIBRARIES= rocketbootstrap
-QQMusicLyric_PRIVATE_FRAMEWORKS = AppSupport 
+QQMusicLyric_LIBRARIES= mryipc
 
 include $(THEOS_MAKE_PATH)/tweak.mk

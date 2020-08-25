@@ -15,7 +15,7 @@
 		<key>isController</key>
 		<true/>
 		<key>label</key>
-		<string>NeteaseLyricSetting</string>
+		<string>MusicLyric</string>
 	</dict>
 </dict>
 </plist>
