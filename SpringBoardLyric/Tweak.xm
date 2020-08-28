@@ -57,38 +57,38 @@ MRYIPCCenter* center;
     LyricOriginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,DEVICE_WIDTH,LYRIC_WIDTH/2)];
     LyricTranslateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,LYRIC_WIDTH/2,DEVICE_WIDTH,LYRIC_WIDTH/2)];
   
-    [LyricOriginLabel setText:@"Lyric Start"];
-    [LyricOriginLabel setAdjustsFontSizeToFitWidth: YES];
-    [LyricOriginLabel setFont:[UIFont boldSystemFontOfSize:14]];
-    [LyricOriginLabel setTextAlignment:NSTextAlignmentCenter];
-    [LyricOriginLabel setBackgroundColor:[[UIColor alloc] initWithRed:0 green:0 blue:0 alpha:0.233]];
+    LyricOriginLabel.text = @"Lyric Start";
+    LyricOriginLabel.adjustsFontSizeToFitWidth = 1;
+    LyricOriginLabel.font = [UIFont boldSystemFontOfSize:14];
+    LyricOriginLabel.textAlignment = NSTextAlignmentCenter;
+    LyricOriginLabel.backgroundColor = [[UIColor alloc] initWithRed:0 green:0 blue:0 alpha:0.233];
 
-    [LyricTranslateLabel setFont:[UIFont boldSystemFontOfSize:14]];
-    [LyricTranslateLabel setAdjustsFontSizeToFitWidth: YES];
-    [LyricTranslateLabel setTextAlignment:NSTextAlignmentCenter];
-    [LyricTranslateLabel setBackgroundColor:[[UIColor alloc] initWithRed:0 green:0 blue:0 alpha:0.233]];
+    LyricTranslateLabel.font = [UIFont boldSystemFontOfSize:14];
+    LyricTranslateLabel.adjustsFontSizeToFitWidth = 1;
+    LyricTranslateLabel.textAlignment = NSTextAlignmentCenter;
+    LyricTranslateLabel.backgroundColor = [[UIColor alloc] initWithRed:0 green:0 blue:0 alpha:0.233];
 
-	[LyricWindow addSubview:LyricOriginLabel];
+    [LyricWindow addSubview:LyricOriginLabel];
     [LyricWindow addSubview:LyricTranslateLabel];
 
     //UIWindowLevelNormal = 0 UIWindowLevelStatusBar = 1000 UIWindowLevelAlert = 2000  
-    [LyricWindow setWindowLevel:2000];
-    [LyricWindow setHidden:0];
-    [LyricWindow setUserInteractionEnabled:YES];
+    LyricWindow.windowLevel = 2000;
+    LyricWindow.hidden = 0;
+    LyricWindow.userInteractionEnabled = 1;
 
    
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SingleTap:)];
-	[tapGesture setNumberOfTapsRequired: 1];
+    [tapGesture setNumberOfTapsRequired: 1];
 
     UITapGestureRecognizer *doubletapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(DoubleTap)];
-	[doubletapGesture setNumberOfTapsRequired: 2];
+    [doubletapGesture setNumberOfTapsRequired: 2];
 
     [tapGesture requireGestureRecognizerToFail:doubletapGesture];
 
     UILongPressGestureRecognizer *holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action: @selector(LongPress)];
 
     
-	[LyricWindow addGestureRecognizer: tapGesture];
+    [LyricWindow addGestureRecognizer: tapGesture];
     [LyricWindow addGestureRecognizer: doubletapGesture];
     [LyricWindow addGestureRecognizer: holdGesture];
    }
@@ -98,7 +98,7 @@ MRYIPCCenter* center;
 
 - (void)SingleTap:(id)gestureRecognizer {    
     CGPoint loc=[gestureRecognizer locationInView:LyricOriginLabel];
-	if((double)loc.x<DEVICE_WIDTH*1/3){
+    if((double)loc.x<DEVICE_WIDTH*1/3){
         MRMediaRemoteSendCommand(kMRPreviousTrack, 0);
     }else if((double)loc.x<DEVICE_WIDTH*2/3){
         MRMediaRemoteSendCommand(kMRTogglePlayPause, 0);
@@ -123,21 +123,21 @@ MRYIPCCenter* center;
 }
 
 - (void)setHidden:(BOOL)arg1{
-    [LyricWindow setHidden:arg1];
+    LyricWindow.hidden = arg1;
 }
 
 
 - (void)updateLyric:(NSString*)origin withTranslate:(NSString*)translate{
-  	LyricOriginLabel.text=origin;
+    LyricOriginLabel.text=origin;
     LyricTranslateLabel.text=translate;
 }
 
 - (void)updateFrame:(CGRect) arg1{
-    [LyricWindow setHidden:0];
-    LyricWindow.frame=arg1;
+    LyricWindow.hidden = 0;
+    LyricWindow.frame = arg1;
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        [LyricWindow setHidden:!isNeteaseOn];
+        LyricWindow.hidden = !isNeteaseOn;
     });
 }
 
@@ -155,7 +155,7 @@ static Lyric* LyricObject;
     %orig; 
 
     if(!LyricObject){
-		LyricObject =  [[Lyric alloc] init];
+        LyricObject =  [[Lyric alloc] init];
     }
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -174,11 +174,11 @@ static Lyric* LyricObject;
 
 %new
 - (void)_updateLyric:(NSDictionary *)args{
-	NSString* lrc_origin=args[@"lrc_origin"];
-	NSString* lrc_translate=args[@"lrc_translate"];
-    NSString* lrc_roma=args[@"lrc_romaji"];
+    NSString* lrc_origin=args[@"lrc_origin"];
+    NSString* lrc_translate=args[@"lrc_translate"];
+    NSString* lrc_romaji=args[@"lrc_romaji"];
   
-    NSString* text=TranslateOrRoma?lrc_translate:lrc_roma;
+    NSString* text=TranslateOrRoma?lrc_translate:lrc_romaji;
 
     dispatch_async(dispatch_get_main_queue(), ^{   
         [LyricObject updateLyric:lrc_origin withTranslate:text];

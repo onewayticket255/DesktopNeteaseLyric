@@ -40,10 +40,7 @@ static NSString* lastLyric;
 	NSString *lrc_romaji = lrcObject.romajiLyric;
     NSLog(@"mlyx_netease Index %lld  lrc %@  lrc_trans %@ lrc_romaji %@",arg1,lrc_origin,lrc_translate,lrc_romaji);
 
-	NSMutableDictionary *info=[NSMutableDictionary dictionary];
-	[info setObject:lrc_origin forKey:@"lrc_origin"];
-    [info setObject:lrc_translate forKey:@"lrc_translate"];
-	[info setObject:lrc_romaji forKey:@"lrc_romaji"];
+	NSDictionary *info = @{@"lrc_origin" : lrc_origin, @"lrc_translate" : lrc_translate, @"lrc_romaji" : lrc_romaji};
 
 	[center callExternalMethod:@selector(_updateLyric:) withArguments:info];
 

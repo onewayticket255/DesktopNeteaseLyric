@@ -129,7 +129,7 @@ NSMutableDictionary* allLyrics=[NSMutableDictionary dictionaryWithCapacity:1024]
   NSLog(@"mlyx_qqmusic count %lu %lu",originLyricArray.count,translateLyricArray.count);
   
   //部分歌曲可能不准确
-  currentTranslateLyricIndex=originLyricArray.count==translateLyricArray.count?currentOriginLyricIndex:currentOriginLyricIndex-(originLyricArray.count-translateLyricArray.count);
+  currentTranslateLyricIndex=currentOriginLyricIndex-(originLyricArray.count-translateLyricArray.count);
   
   if(currentTranslateLyricIndex<0){
     //防越界
@@ -172,11 +172,7 @@ NSMutableDictionary* allLyrics=[NSMutableDictionary dictionaryWithCapacity:1024]
   NSLog(@"mlyx_qqmusic currentlyric_trans %@",lrc_translate);
   NSLog(@"mlyx_qqmusic currentlyric_roma %@",lrc_romaji);
 
-
-  NSMutableDictionary *info=[NSMutableDictionary dictionary];
-  [info setObject:lrc_origin forKey:@"lrc_origin"];
-  [info setObject:lrc_translate forKey:@"lrc_translate"];
-  [info setObject:lrc_romaji forKey:@"lrc_romaji"];
+  NSDictionary *info = @{@"lrc_origin" : lrc_origin, @"lrc_translate" : lrc_translate, @"lrc_romaji" : lrc_romaji};
 
 	[center callExternalMethod:@selector(_updateLyric:) withArguments:info];
 }
