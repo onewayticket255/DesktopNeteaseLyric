@@ -7,18 +7,20 @@ on:
 
 jobs:
   build:
-    name: Build Tweak
     runs-on: macOS-latest
-    env:
-      THEOS: theos
 
     steps:
     - name: Checkout
       uses: actions/checkout@master
 
     - name: Install Theos Dependencies
-      run: brew install ldid xz
+      run: brew install ldid xz make
 
+    - name: Setup GUN Make(Parallel Building)
+      run: |
+        echo PATH=\"$(brew --prefix make)/libexec/gnubin:\$PATH\" >> ~/.zshrc
+        source ~/.zshrc
+        
     - name: Setup Theos
       uses: actions/checkout@master
       with:
@@ -40,7 +42,7 @@ jobs:
     - name: Build Package
       id: build_package
       run: | 
-        make package
+        make package debug=0
         echo "::set-output name=package::$(ls -t packages | head -n1)"
       env:
         THEOS: theos

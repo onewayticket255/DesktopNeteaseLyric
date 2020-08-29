@@ -1,3 +1,4 @@
+//仅去除部分vip也无法去除的广告
 @interface NMTabBar:UIView
 @end
 
@@ -116,7 +117,7 @@
 
 //底栏
 %hook NMTabBar
-- (void)layoutSubviews{
+- (void)didMoveToWindow{
    %orig;
 	for(UIView *subview in [self subviews]){
       	if([subview isKindOfClass: %c(UILabel)]){
@@ -170,31 +171,10 @@
 }
 %end
 
-//Comment Ad
-%hook NMResourceRelateMomentCollectionViewCell
-- (void)layoutSubviews{
-	[self removeFromSuperview];
-}
-- (struct CGSize)sizeThatFits:(struct CGSize)arg1{
-  return CGSizeMake(%orig.width,0);
-}
-- (struct CGSize)intrinsicContentSize{
-  return CGSizeMake(%orig.width,0);
-}
-%end
-
-%hook NMResourceCommentAdCell
-- (void)layoutSubviews{
-	[self removeFromSuperview];	
-}
-+ (double)heightForComment:(id)arg1 component:(id)arg2{
-	return 0;
-}
-%end
 
 //播放界面防误触
 %hook ATScrollView
-- (void)layoutSubviews{
+- (void)didMoveToWindow{
     %orig;
 	self.userInteractionEnabled=0;
 }

@@ -1,3 +1,4 @@
+//仅去除部分vip也无法去除的广告
 @interface QMRootTabBarItem:UIView
 @property(copy, nonatomic) NSString *title;
 @end
@@ -15,7 +16,7 @@
 
 //TAB
 %hook QMRootTabBarItem
-- (void)layoutSubviews{
+- (void)didMoveToWindow{
   %orig;
 
   if([self.title isEqualToString:@"首页"]||[self.title isEqualToString:@"我的"])
@@ -34,7 +35,7 @@
 
 //search placeholder
 %hook QMRecommendWordLabel 
-- (void)layoutSubviews{
+- (void)didMoveToWindow{
  [self removeFromSuperview];
 }
 %end
@@ -47,7 +48,7 @@
 
 //抽绿钻
 %hook QMbrandAdPendantView
-- (void)layoutSubviews{
+- (void)didMoveToWindow{
   [self removeFromSuperview];
 }
 %end
@@ -59,7 +60,7 @@
 
 %end
 
-//我的 广告
+//我的 banner广告
 %hook QMMyMusicAdBannerCell
 + (double)cellHeight{
   return 0;
@@ -67,17 +68,9 @@
 %end
 
 
-//歌单 底部
-%hook QMPROmgAdBannerView
-- (id)initWithFrame:(struct CGRect)arg1{
-  return nil;
-}
-%end
-
-
 //播放界面 相关视频
 %hook QMRelatedVideoView
-- (void)layoutSubviews{
+- (void)didMoveToWindow{
   %orig;
   [self removeFromSuperview];
 }

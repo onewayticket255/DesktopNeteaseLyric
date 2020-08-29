@@ -1,7 +1,10 @@
-export ARCHS = arm64 arm64e
 export TARGET = iphone:latest:13
 
-FINALPACKAGE = 1
+ifeq ($(debug),0)
+	export ARCHS= arm64 arm64e
+else
+	export ARCHS= arm64 
+endif
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 

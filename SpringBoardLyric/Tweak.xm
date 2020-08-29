@@ -13,7 +13,6 @@ static bool isNeteaseOn =0;
 NSUserDefaults *defaults;
 MRYIPCCenter* center;
 
-
 @interface SBApplication : NSObject
 @property (nonatomic,readonly) NSString * bundleIdentifier;                                                                                   
 @end
@@ -203,7 +202,6 @@ static Lyric* LyricObject;
 
 
 %end
-
 
 
 static void updateLyricFrame() {

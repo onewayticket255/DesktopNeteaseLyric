@@ -38,4 +38,8 @@ void run_cmd(char *cmd)
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/onewayticket255/DesktopNeteaseLyric"] options:@{} completionHandler:nil];
 }
 
+-(void) openRelease{
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/onewayticket255/DesktopNeteaseLyric/releases"] options:@{} completionHandler:nil];
+}
+
 @end
