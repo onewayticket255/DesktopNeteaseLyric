@@ -1,6 +1,6 @@
 Package: mlyx.neteasespringboardlyric
 Name: NeteaseSpringBoardLyric
-Version: 1.1.0
+Version: 1.1.2
 Architecture: iphoneos-arm
 Description: NeteaseMusic && QQMusic Lyric in HomeScreen
 Maintainer: mlyx

@@ -1,11 +1,18 @@
 #define DEVICE_WIDTH  [[UIScreen mainScreen] bounds].size.width
-#define LYRIC_WIDTH  36 //iPhone X,iPhone XS 屏幕底部可利用高度
+#define DEVICE_HEIGHT  [[UIScreen mainScreen] bounds].size.height
+#define LYRIC_WIDTH  34 //iPhone X,iPhone XS safe-area-inset-bottom
 
 #import "MediaRemote.h"
 #import <MRYIPCCenter.h>
 
+/*
+Model         pt         safe-area-inset-top safe-area-inset-bottom
+iPhone X      375*812    44                  34
+iPhone XS Max 414*896    44                  34
+*/
+
 static int isEnabled;
-static CGFloat LYRIC_Y;   //xs max = 860, x = 776
+static CGFloat LYRIC_Y;  
 static NSMutableDictionary *settings;
 static bool TranslateOrRoma = 1;
 static bool isNeteaseOn =0;
@@ -51,6 +58,8 @@ MRYIPCCenter* center;
 - (id)init{
    self = [super init];
    if(self){
+    
+    LYRIC_Y= settings[@"Y-Axis"] ? [settings[@"Y-Axis"] doubleValue]:DEVICE_HEIGHT-LYRIC_WIDTH;
 
     LyricWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0,LYRIC_Y,DEVICE_WIDTH,LYRIC_WIDTH)];
     LyricOriginLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,DEVICE_WIDTH,LYRIC_WIDTH/2)];
@@ -154,7 +163,7 @@ static Lyric* LyricObject;
     %orig; 
 
     if(!LyricObject){
-        LyricObject =  [[Lyric alloc] init];
+        LyricObject =  [Lyric new];
     }
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -188,7 +197,7 @@ static Lyric* LyricObject;
 //autohide
 -(void)NowPlayingApplicationDidChange:(NSNotification *)notification {  
 
-    NSString *appName =[notification.userInfo  objectForKey:@"kMRMediaRemoteNowPlayingApplicationDisplayNameUserInfoKey"];
+    NSString *appName =notification.userInfo[@"kMRMediaRemoteNowPlayingApplicationDisplayNameUserInfoKey"];
     NSLog(@"mlyx NowPlayingApplicationDidChangeInfo %@",notification.userInfo);
     NSLog(@"mlyx NowPlayingApplicationDidChangeAppName %@",appName);
 
@@ -206,17 +215,13 @@ static Lyric* LyricObject;
 
 static void updateLyricFrame() {
     defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *d = (NSNumber *)[defaults objectForKey:@"Y-Axis" inDomain:@"mlyx.neteaselyricsetting"];
-    [LyricObject updateFrame:CGRectMake(0,[d doubleValue],DEVICE_WIDTH,LYRIC_WIDTH)];
+    [LyricObject updateFrame:CGRectMake(0,[(NSNumber *)[defaults objectForKey:@"Y-Axis" inDomain:@"mlyx.neteaselyricsetting"] doubleValue],DEVICE_WIDTH,LYRIC_WIDTH)];
 }
 
 
 %ctor{
     settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/mlyx.neteaselyricsetting.plist"];
-    isEnabled = [settings objectForKey:@"isEnabled"] ? [[settings objectForKey:@"isEnabled"] boolValue] : 1;
-
-    NSString* Y_Axis=[settings objectForKey:@"Y-Axis"] ? [settings objectForKey:@"Y-Axis"]: @"50";
-    LYRIC_Y=[Y_Axis doubleValue];
+    isEnabled = settings[@"isEnabled"] ? [settings[@"isEnabled"] boolValue] : 1;    
     
     if(isEnabled){
         %init;

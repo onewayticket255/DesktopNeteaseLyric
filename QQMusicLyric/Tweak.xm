@@ -55,36 +55,37 @@ NSMutableDictionary* allLyrics=[NSMutableDictionary dictionaryWithCapacity:1024]
     
       for (KSSentence* sentence in %orig.originLyric.sentencesArray) {
                 MyLyric* myLyric = [MyLyric alloc];
-                [myLyric setText:[sentence text]];
-                [myLyric setStartTime:[sentence startTime]];
+                myLyric.text = [sentence text];
+                myLyric.startTime = [sentence startTime];
                 [tempMyLyrics_origin addObject:myLyric];
       }
 
       for (KSSentence* sentence in %orig.translateLyric.sentencesArray) {
                 MyLyric* myLyric = [MyLyric alloc];
-                [myLyric setText:[sentence text]];
-                [myLyric setStartTime:[sentence startTime]];
+                myLyric.text = [sentence text];
+                myLyric.startTime = [sentence startTime];
                 [tempMyLyrics_translate addObject:myLyric];         
       }
 
       for (KSSentence* sentence in %orig.yinyiLyric.sentencesArray) {
                 MyLyric* myLyric = [MyLyric alloc];
-                [myLyric setText:[sentence text]];
-                [myLyric setStartTime:[sentence startTime]];
+                myLyric.text = [sentence text];
+                myLyric.startTime = [sentence startTime];
                 [tempMyLyrics_roma addObject:myLyric];
       }
 
       NSMutableDictionary* theLyric=[NSMutableDictionary dictionaryWithCapacity:3];
-      [theLyric setObject:tempMyLyrics_origin forKey:@"origin"];
-      [theLyric setObject:tempMyLyrics_translate forKey:@"translate"];
-      [theLyric setObject:tempMyLyrics_roma forKey:@"roma"];
-      
+
+      theLyric[@"origin"]=tempMyLyrics_origin;
+      theLyric[@"translate"]=tempMyLyrics_translate;
+      theLyric[@"roma"]=tempMyLyrics_roma;
+
       NSLog(@"mlyx_qqmusic_song name %@",[%orig.song song_Name]);
       NSLog(@"mlyx_qqmusic_tempMyLyrics_origin %@",tempMyLyrics_origin);
       NSLog(@"mlyx_qqmusic_tempMyLyrics_translate %@",tempMyLyrics_translate);
       NSLog(@"mlyx_qqmusic_tempMyLyrics_roma %@",tempMyLyrics_roma);
 
-      [allLyrics setValue:theLyric forKey:[%orig.song song_Name]];
+      allLyrics[[%orig.song song_Name]]=theLyric;
     }
   
   return %orig;
@@ -107,13 +108,12 @@ NSMutableDictionary* allLyrics=[NSMutableDictionary dictionaryWithCapacity:1024]
   lstTime = curTime;
     
  
-  NSMutableDictionary* theLyric= [allLyrics objectForKey:self.currentSong.song_Name];
+  NSMutableDictionary* theLyric= allLyrics[self.currentSong.song_Name];
 
-  NSArray* originLyricArray = [theLyric objectForKey:@"origin"];
-  NSArray* translateLyricArray = [theLyric objectForKey:@"translate"];
-  NSArray* romaLyricArray = [theLyric objectForKey:@"roma"];
+  NSArray* originLyricArray = theLyric[@"origin"];
+  NSArray* translateLyricArray = theLyric[@"translate"];
+  NSArray* romaLyricArray = theLyric[@"roma"];
 
-  
   int currentOriginLyricIndex=0;
   int currentTranslateLyricIndex=0;
 
@@ -131,8 +131,8 @@ NSMutableDictionary* allLyrics=[NSMutableDictionary dictionaryWithCapacity:1024]
   //部分歌曲可能不准确
   currentTranslateLyricIndex=currentOriginLyricIndex-(originLyricArray.count-translateLyricArray.count);
   
-  if(currentTranslateLyricIndex<0){
-    //防越界
+  ////防越界
+  if(currentTranslateLyricIndex<0){ 
     currentTranslateLyricIndex=0;
   }
 

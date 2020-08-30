@@ -1,5 +1,8 @@
 #import <Preferences/PSListController.h>
 
-@interface NLSRootListController : PSListController
+@interface NSUserDefaults ()
+-(void)removeObjectForKey:(id)arg1 inDomain:(id)arg2 ;
+@end
 
+@interface NLSRootListController : PSListController
 @end

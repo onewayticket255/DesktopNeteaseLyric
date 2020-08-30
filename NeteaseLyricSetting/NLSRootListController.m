@@ -1,4 +1,5 @@
 #include "NLSRootListController.h"
+#include "ChangeLogViewController.h"
 #include <spawn.h>
 
 @implementation NLSRootListController
@@ -34,12 +35,19 @@ void run_cmd(char *cmd)
 	run_cmd("killall -9 SpringBoard");
 }
 
--(void) openGithub{
+-(void)restoreDefaultAxis{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];	
+	[defaults removeObjectForKey:@"Y-Axis" inDomain:@"mlyx.neteaselyricsetting"];
+	run_cmd("killall -9 SpringBoard");
+}
+
+-(void)openGithub{
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/onewayticket255/DesktopNeteaseLyric"] options:@{} completionHandler:nil];
 }
 
--(void) openRelease{
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/onewayticket255/DesktopNeteaseLyric/releases"] options:@{} completionHandler:nil];
+-(void)openRelease{
+  [self.navigationController pushViewController:[[ChangeLogViewController alloc] init] animated:YES];
 }
+
 
 @end

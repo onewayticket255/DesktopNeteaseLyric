@@ -35,7 +35,7 @@
 			<key>cell</key>
 			<string>PSSliderCell</string>
 			<key>default</key>
-			<string>200</string>
+			<string>0</string>
 			<key>defaults</key>
 			<string>mlyx.neteaselyricsetting</string>
 			<key>key</key>
@@ -48,6 +48,15 @@
 			<true/>
 			<key>PostNotification</key>
             <string>mlyx.neteaselyricsetting/Y-AxisChanged</string>
+		</dict>
+
+		<dict>
+		   <key>cell</key>
+		   <string>PSButtonCell</string>
+		   <key>label</key>
+		   <string>Restore Default Y-AXIS</string>
+		   <key>action</key>
+		   <string>restoreDefaultAxis</string>
 		</dict>
         
 		<dict>
