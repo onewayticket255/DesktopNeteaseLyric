@@ -1,3 +1,9 @@
+# https://github.com/actions/virtual-environments
+# https://github.com/theos/theos/wiki/Parallel-Building
+
+
+# 1. Add Repo Github Account Key: secrets.REPO_ACCOUNT_KEY 
+
 name: Build
 
 on:
@@ -6,47 +12,48 @@ on:
       - 'v*'
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: macOS-latest
 
     steps:
     - name: Checkout
-      uses: actions/checkout@master
+      uses: actions/checkout@v2
 
-    - name: Install Theos Dependencies
-      run: brew install ldid xz make
+    - name: Install Dependency
+      run: brew install ldid make xz dpkg bzip2
         
     - name: Setup Theos
-      uses: actions/checkout@master
+      uses: actions/checkout@v2
       with:
         repository: theos/theos
         path: theos
         submodules: recursive
 
-    - name: Download SDK
-      uses: actions/checkout@master
+    - name: Download iOS SDK
+      uses: actions/checkout@v2
       with:
         repository: mlyxshi/iOS-SDK
         path: theos/sdks/
 
-    - name: Download Tweak Depends
+    - name: Download Tweak Dependency
       run: |
         curl -L -o theos/include/MRYIPCCenter.h https://raw.githubusercontent.com/Muirey03/MRYIPC/master/MRYIPCCenter.h
         curl -L -o theos/lib/libmryipc.dylib https://raw.githubusercontent.com/Muirey03/MRYIPC/master/usr/lib/libmryipc.dylib
 
     - name: Build Package
       id: build_package
-      run: | 
-        /usr/local/opt/make/libexec/gnubin/make package debug=0
+      run:  | 
+        export THEOS=theos
+        export PATH=/usr/local/opt/make/libexec/gnubin:$PATH
+        make package debug=0
         echo "::set-output name=package::$(ls -t packages | head -n1)"
-      env:
-        THEOS: theos
+
 
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
@@ -58,9 +65,30 @@ jobs:
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./packages/${{ steps.build_package.outputs.package }}
+        asset_path: packages/${{ steps.build_package.outputs.package }}
         asset_name: ${{ steps.build_package.outputs.package }}
         asset_content_type: application/vnd.debian.binary-package
+     
+    - name: Clone Cydia Repo
+      run: |
+        touch ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        git config --global user.name mlyx
+        git config --global user.email mlyxdev@gmail.com
+        echo "Host github\n User git\n HostName github.com\n IdentityFile ~/.ssh/id_rsa" > ~/.ssh/config
+        echo "${{ secrets.REPO_ACCOUNT_KEY }}"  > ~/.ssh/id_rsa
+        git clone git@github.com:mlyxshi/repo
+    
+    - name: Update Cydia Repo
+      run: |
+        mv packages/${{ steps.build_package.outputs.package }} repo/debs
+        cd repo
+        rm Packages*  
+        dpkg-scanpackages -m ./debs > Packages 
+        bzip2 Packages
+        git add .
+        git commit -m "update"
+        git push

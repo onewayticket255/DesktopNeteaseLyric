@@ -3,6 +3,7 @@ NeteaseMusic && QQMusic Lyric in Jailbroken iOS Device SpringBoard
 [![Actions Status](https://github.com/onewayticket255/DesktopNeteaseLyric/workflows/Build/badge.svg)](https://github.com/onewayticket255/DesktopNeteaseLyric/actions)
 ## Requirements
 - A11 Above
+- Under Dark Mode
 - iOS 13 
 - NeteaseMusic Version:7.2.10 Above
 - QQMusic Version:10.0.0 Above
