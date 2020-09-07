@@ -177,9 +177,9 @@
 			<string>isDarkLaunchScreenEnabled</string>
 			<key>label</key>
 			<string>DarkLaunchScreen</string>
-
 		</dict>
-			<dict>
+
+		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
@@ -192,8 +192,7 @@
 			<string>BluetoothLaunch</string>
 		</dict>
 
-		</dict>
-			<dict>
+		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
