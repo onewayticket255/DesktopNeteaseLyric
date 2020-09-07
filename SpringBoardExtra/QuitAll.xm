@@ -30,7 +30,7 @@ bool isQuitAllInitialized =0;
 
 
 %hook SBSwitcherAppSuggestionContentView
--(void)layoutSubviews{
+-(void)didMoveToWindow{
 	%orig;
 
 	if(!isQuitAllInitialized){

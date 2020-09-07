@@ -35,10 +35,17 @@ jobs:
         repository: mlyxshi/iOS-SDK
         path: theos/sdks/
 
-    - name: Download Tweak Dependency
-      run: |
-        curl -L -o theos/include/MRYIPCCenter.h https://raw.githubusercontent.com/Muirey03/MRYIPC/master/MRYIPCCenter.h
-        curl -L -o theos/lib/libmryipc.dylib https://raw.githubusercontent.com/Muirey03/MRYIPC/master/usr/lib/libmryipc.dylib
+    - name: Download Extra Header
+      uses: actions/checkout@v2
+      with:
+        repository: mlyxshi/theos-header
+        path: theos/include/
+
+    - name: Download Extra Lib
+      uses: actions/checkout@v2
+      with:
+        repository: mlyxshi/theos-library
+        path: theos/lib/
 
     - name: Build Package
       id: build_package

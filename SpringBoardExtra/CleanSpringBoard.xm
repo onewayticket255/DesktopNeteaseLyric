@@ -14,8 +14,7 @@
 
 //iPhoneX home indicator
 %hook MTLumaDodgePillView
--(void)layoutSubviews
-{
+-(void)didMoveToWindow{
 	%orig;
 	[self removeFromSuperview];
 }
@@ -30,7 +29,7 @@
 
 //homescreen翻页点
 %hook SBIconListPageControl
--(void)layoutSubviews{
+-(void)didMoveToWindow{
 	%orig;
 	[self removeFromSuperview];
 }
@@ -39,7 +38,7 @@
 
 //swipe up tip && ControlCenterGrabber
 %hook CSTeachableMomentsContainerView
--(void)layoutSubviews{
+-(void)didMoveToWindow{
 	%orig;
 	[self removeFromSuperview];
 }
@@ -47,16 +46,11 @@
 
 //No Old Notifications in LC
 %hook NCNotificationListSectionRevealHintView
--(void)layoutSubviews{
+-(void)didMoveToWindow{
 	%orig;
 	[self removeFromSuperview];
 }
 %end
-
-
-
-
-
 
 %ctor{
     NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/mlyx.neteaselyricsetting.plist"];

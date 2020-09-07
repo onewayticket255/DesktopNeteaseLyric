@@ -177,8 +177,8 @@
 			<string>isDarkLaunchScreenEnabled</string>
 			<key>label</key>
 			<string>DarkLaunchScreen</string>
-		</dict>
 
+		</dict>
 			<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
@@ -190,6 +190,20 @@
 			<string>isBluetoothLaunchEnabled</string>
 			<key>label</key>
 			<string>BluetoothLaunch</string>
+		</dict>
+
+		</dict>
+			<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>mlyx.neteaselyricsetting</string>
+			<key>key</key>
+			<string>isNotifyMusicEnabled</string>
+			<key>label</key>
+			<string>NotifyMusic</string>
 		</dict>
 
 		<dict>

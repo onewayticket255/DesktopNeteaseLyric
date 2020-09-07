@@ -1,4 +1,4 @@
-#import "MediaRemote.h"
+#import <MediaRemote/MediaRemote.h>
 @interface SBMediaController : NSObject
 @property (nonatomic, weak,readonly) id nowPlayingApplication;
 +(id)sharedInstance;
@@ -38,7 +38,8 @@ viewDidAppear
         notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(updateImage:) name:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification object:nil];
         [notificationCenter postNotificationName:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoDidChangeNotification object:nil];
-            [notificationCenter addObserver:self selector:@selector(NowPlayingApplicationDidChange:) name:(__bridge NSString *)kMRMediaRemoteNowPlayingApplicationDidChangeNotification object:nil];
+        [notificationCenter addObserver:self selector:@selector(NowPlayingApplicationDidChange:) name:(__bridge NSString *)kMRMediaRemoteNowPlayingApplicationDidChangeNotification object:nil];
+        
         if (imageView == nil) {
             imageView = [[UIImageView alloc] initWithFrame:self.contentViewController.view.bounds];
             imageView.layer.cornerRadius = self.moduleContentView.compactContinuousCornerRadius;

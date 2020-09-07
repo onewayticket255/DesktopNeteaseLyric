@@ -40,7 +40,7 @@
 // CSAdjunctItemView  LC Music Widget
 // CSAdjunctItemView.subviews[0] PLPlatterView
 // PLPlatterView.subviews[0] MTMaterialView
-- (void)layoutSubviews{
+- (void)didMoveToWindow{
     %orig;
     if([self subviews] && [[self subviews] count] > 0 && [[self subviews][0] subviews] && [[[self subviews][0] subviews] count] > 0){
     //MTMaterialView alpha

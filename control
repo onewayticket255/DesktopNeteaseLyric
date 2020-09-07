@@ -1,12 +1,12 @@
 Package: mlyx.neteasespringboardlyric
 Name: NeteaseSpringBoardLyric
-Version: 1.1.3
+Version: 1.1.4
 Architecture: iphoneos-arm
 Description: NeteaseMusic && QQMusic Lyric in HomeScreen
 Maintainer: mlyx
 Author: mlyx
 Section: Tweaks
-Depends: mobilesubstrate,com.muirey03.libmryipc
+Depends: mobilesubstrate,com.muirey03.libmryipc,net.limneos.libbulletin
 
 
 
