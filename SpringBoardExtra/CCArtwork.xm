@@ -1,4 +1,5 @@
-#import <MediaRemote/MediaRemote.h>
+#import "MediaRemote.h"
+
 @interface SBMediaController : NSObject
 @property (nonatomic, weak,readonly) id nowPlayingApplication;
 +(id)sharedInstance;

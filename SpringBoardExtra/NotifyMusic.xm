@@ -1,5 +1,5 @@
-#import <MediaRemote/MediaRemote.h>
 #import "JBBulletinManager.h"
+#import "MediaRemote.h"
 
 NSString *cachedSongName;
 
