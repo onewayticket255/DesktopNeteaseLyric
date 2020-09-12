@@ -205,6 +205,20 @@
 			<string>NotifyMusic</string>
 		</dict>
 
+		
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>mlyx.neteaselyricsetting</string>
+			<key>key</key>
+			<string>isLowBatteryNotificationEnabled</string>
+			<key>label</key>
+			<string>LowBatteryNotification</string>
+		</dict>
+
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>

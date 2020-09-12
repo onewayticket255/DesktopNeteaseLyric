@@ -116,31 +116,59 @@ NSMutableDictionary* allLyrics=[NSMutableDictionary dictionaryWithCapacity:1024]
 
   int currentOriginLyricIndex=0;
   int currentTranslateLyricIndex=0;
+  int currentRomaLyricIndex=0;
 
-  //get lyric index
-  for(int i=0;i<[originLyricArray count];i++){
-    MyLyric* tmpOriginLyric=originLyricArray[i];
 
-    if ([tmpOriginLyric startTime] > curTime) 
+  for(int i=0;i<originLyricArray.count;i++){
+    MyLyric* tmpLyric=originLyricArray[i];
+
+    if ([tmpLyric startTime] > curTime) {
+        //NSLog(@"mlyx origin_time %lld",[tmpLyric startTime]);
         break;
+    }
     currentOriginLyricIndex=i;
   }
-  
-  NSLog(@"mlyx_qqmusic count %lu %lu",originLyricArray.count,translateLyricArray.count);
-  
-  //部分歌曲可能不准确
+
+  for(int i=0;i<romaLyricArray.count;i++){
+    MyLyric* tmpLyric=romaLyricArray[i];
+
+    if ([tmpLyric startTime] > curTime) {
+        //NSLog(@"mlyx roma_time %lld",[tmpLyric startTime]);
+        break;
+    }
+    currentRomaLyricIndex=i;
+  }
+
+
+  // 这种方式获取currentTranslateLyricIndex有问题
+  // 一个歌词对应的origin startTime==roma startTime!==translate startTime
+  // for(int i=0;i<translateLyricArray.count;i++){
+  //   MyLyric* tmpLyric=translateLyricArray[i];
+
+  //   if ([tmpLyric startTime] > curTime){ 
+  //       NSLog(@"mlyx translate_time %lld",[tmpLyric startTime]);
+  //       break;
+  //   }
+  //   currentTranslateLyricIndex=i;
+  // }
+
+  //Workaround
+  //大部分情况准确,少数歌曲不准确
   currentTranslateLyricIndex=currentOriginLyricIndex-(originLyricArray.count-translateLyricArray.count);
   
-  ////防越界
+  //防越界
   if(currentTranslateLyricIndex<0){ 
     currentTranslateLyricIndex=0;
   }
 
+  
+  NSLog(@"mlyx_qqmusic count %lu %lu %lu",originLyricArray.count,translateLyricArray.count,romaLyricArray.count);
+  
+  
   MyLyric *lyricO=originLyricArray[currentOriginLyricIndex];
   NSString *lrc_origin = lyricO.text;
 
-  if([lastLyric isEqualToString:lrc_origin])
-    return;
+  if([lastLyric isEqualToString:lrc_origin]) return;
 	
 	lastLyric=lrc_origin;
 
@@ -161,16 +189,18 @@ NSMutableDictionary* allLyrics=[NSMutableDictionary dictionaryWithCapacity:1024]
   }
 
   if(romaLyricArray.count>0){
-      lyricR=romaLyricArray[currentTranslateLyricIndex];
+      lyricR=romaLyricArray[currentRomaLyricIndex];
       lrc_romaji=lyricR.text;
   }
         
    
-  NSLog(@"mlyx_qqmusic progress_time %f",curTime);
-  NSLog(@"mlyx_qqmusic currentlyric_index %d",currentOriginLyricIndex);
-  NSLog(@"mlyx_qqmusic currentlyric_origin %@",lrc_origin);
-  NSLog(@"mlyx_qqmusic currentlyric_trans %@",lrc_translate);
-  NSLog(@"mlyx_qqmusic currentlyric_roma %@",lrc_romaji);
+  NSLog(@"mlyx_qqmusic Progress_time %f",curTime);
+  NSLog(@"mlyx_qqmusic Currentlyric_index %d",currentOriginLyricIndex);
+  NSLog(@"mlyx_qqmusic Translatelyric_index %d",currentTranslateLyricIndex);
+  NSLog(@"mlyx_qqmusic Romalyric_index %d",currentRomaLyricIndex);
+  NSLog(@"mlyx_qqmusic lyric_origin %@",lrc_origin);
+  NSLog(@"mlyx_qqmusic lyric_trans %@",lrc_translate);
+  NSLog(@"mlyx_qqmusic lyric_roma %@",lrc_romaji);
 
   NSDictionary *info = @{@"lrc_origin" : lrc_origin, @"lrc_translate" : lrc_translate, @"lrc_romaji" : lrc_romaji};
 
