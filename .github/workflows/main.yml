@@ -32,7 +32,7 @@ jobs:
     - name: Download iOS SDK
       uses: actions/checkout@v2
       with:
-        repository: mlyxshi/iOS-SDK
+        repository: xybp888/iOS-SDKs
         path: theos/sdks/
 
     - name: Download Extra Header

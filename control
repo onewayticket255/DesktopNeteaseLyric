@@ -6,6 +6,6 @@ Description: NeteaseMusic && QQMusic Lyric in HomeScreen
 Maintainer: mlyx
 Author: mlyx
 Section: Tweaks
-Depends: mobilesubstrate,com.muirey03.libmryipc
+Depends: mobilesubstrate,com.muirey03.libmryipc,firmware(>=13.0)
 
 
