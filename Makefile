@@ -9,6 +9,7 @@ endif
 INSTALL_TARGET_PROCESSES = SpringBoard
 
 include $(THEOS)/makefiles/common.mk
+SUBPROJECTS += SpotifyMusicLyric
 SUBPROJECTS += NeteaseMusicLyric
 SUBPROJECTS += QQMusicLyric
 SUBPROJECTS += CleanNeteaseMusic

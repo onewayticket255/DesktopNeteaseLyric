@@ -15,7 +15,7 @@ static int isEnabled;
 static CGFloat LYRIC_Y;  
 static NSMutableDictionary *settings;
 static bool TranslateOrRoma = 1;
-static bool isNeteaseOn =0;
+static bool isMusicOn =0;
 
 NSUserDefaults *defaults;
 MRYIPCCenter* center;
@@ -145,7 +145,7 @@ MRYIPCCenter* center;
     LyricWindow.frame = arg1;
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        LyricWindow.hidden = !isNeteaseOn;
+        LyricWindow.hidden = !isMusicOn;
     });
 }
 
@@ -201,10 +201,10 @@ static Lyric* LyricObject;
     NSLog(@"mlyx NowPlayingApplicationDidChangeInfo %@",notification.userInfo);
     NSLog(@"mlyx NowPlayingApplicationDidChangeAppName %@",appName);
 
-    isNeteaseOn=[appName isEqualToString:@"NetEase Music"]||[appName isEqualToString:@"QQMusic"];
+    isMusicOn=[appName isEqualToString:@"NetEase Music"]||[appName isEqualToString:@"QQMusic"]||[appName isEqualToString:@"Spotify"];
     
     dispatch_async(dispatch_get_main_queue(), ^{   
-       [LyricObject setHidden:!isNeteaseOn];
+       [LyricObject setHidden:!isMusicOn];
     });
 
 }
