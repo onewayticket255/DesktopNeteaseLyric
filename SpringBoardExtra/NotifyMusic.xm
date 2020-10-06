@@ -14,26 +14,6 @@ NSString *cachedSongName;
 @end
 
 
-@interface BBServer : NSObject
-- (void)publishBulletin:(id)arg1 destinations:(unsigned long long)arg2;
-@end
-
-@interface BBAction : NSObject
-+ (id)actionWithLaunchBundleID:(id)arg1 callblock:(id)arg2;
-@end
-
-@interface BBBulletin : NSObject
-@property(copy, nonatomic) NSString *title;
-@property(copy, nonatomic) NSString *message;
-@property(copy, nonatomic) NSString *sectionID;
-@property(copy, nonatomic) NSString *bulletinID;
-@property(retain, nonatomic) NSString *recordID;
-@property(copy, nonatomic) NSString *publisherBulletinID;
-@property(retain, nonatomic) NSDate *date;
-@property(assign, nonatomic) BOOL turnsOnDisplay;
-@property(copy, nonatomic) id defaultAction;
-@end
-
 BBServer *bbServer;
 
 %group BBServer
@@ -45,7 +25,29 @@ BBServer *bbServer;
 	}
 
 	%end
+
+	%hook BBBulletin
+	- (BBSectionIcon*)sectionIcon {
+		id r = %orig;
+		BBSectionIcon *icon = [BBSectionIcon new];
+		if ([self.publisherBulletinID isEqualToString:@"mlyx-netease"]){
+			[icon addVariant:[BBSectionIconVariant variantWithFormat:0 imageName: @"icon-netease" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/NeteaseLyricSetting.bundle"]]];
+		    return icon;
+		}else if([self.publisherBulletinID isEqualToString:@"mlyx-qqmusic"]){
+			[icon addVariant:[BBSectionIconVariant variantWithFormat:0 imageName: @"icon-qqmusic" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/NeteaseLyricSetting.bundle"]]];
+		    return icon;
+		}else if([self.publisherBulletinID isEqualToString:@"mlyx-spotify"]){
+			[icon addVariant:[BBSectionIconVariant variantWithFormat:0 imageName: @"icon-spotify" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/NeteaseLyricSetting.bundle"]]];
+		    return icon;
+		}else{
+			return r;
+		}		
+	}
+
+
+	%end
 %end
+
 
 
 %group NotifyMusic
@@ -74,16 +76,36 @@ BBServer *bbServer;
 
 
 				BBBulletin *bulletin = [[%c(BBBulletin) alloc] init];
+   
 				bulletin.title = title;
 				bulletin.message = message;
+				//sectionID 必须是apple原生应用 通知才会显示，不懂为什么
 				bulletin.sectionID = @"com.apple.Music";
 				bulletin.bulletinID = [[NSProcessInfo processInfo] globallyUniqueString];
 				bulletin.recordID = [[NSProcessInfo processInfo] globallyUniqueString];
-				bulletin.publisherBulletinID = [[NSProcessInfo processInfo] globallyUniqueString];
 				bulletin.date = [NSDate date];
 				bulletin.turnsOnDisplay = YES;
 				bulletin.defaultAction = [%c(BBAction) actionWithLaunchBundleID:bundleId callblock: nil];
 				
+
+				if ([bundleId isEqualToString:@"com.netease.cloudmusic"]){
+					bulletin.publisherBulletinID = @"mlyx-netease";
+					bulletin.header = @"Netease Music";
+				}
+
+				if([bundleId isEqualToString:@"com.tencent.QQMusic"]){
+					bulletin.publisherBulletinID = @"mlyx-qqmusic";
+					bulletin.header = @"QQ Music";
+				}
+				
+				if([bundleId isEqualToString:@"com.spotify.client"]){
+					bulletin.publisherBulletinID = @"mlyx-spotify";
+					bulletin.header = @"Spotify";
+				}
+
+				
+
+
 				if(bbServer && [bbServer respondsToSelector: @selector(publishBulletin:destinations:)])
 				{
 					dispatch_sync(__BBServerQueue, 

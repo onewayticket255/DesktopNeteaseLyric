@@ -19,9 +19,23 @@
 			<key>defaults</key>
 			<string>mlyx.neteaselyricsetting</string>
 			<key>key</key>
-			<string>isEnabled</string>
+			<string>isLyricEnabled</string>
 			<key>label</key>
-			<string>Enable</string>
+			<string>Enable Lyric in SpringBoard</string>
+		</dict>
+
+		
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>mlyx.neteaselyricsetting</string>
+			<key>key</key>
+			<string>isLockScreenEnabled</string>
+			<key>label</key>
+			<string>Show Lyric in LockScreen(beta)</string>
 		</dict>
 		
 		<dict>
@@ -258,6 +272,6 @@
 
 	</array>
 	<key>title</key>
-	<string>Netease and QQ Music Lyric</string>
+	<string>Music Lyric</string>
 </dict>
 </plist>

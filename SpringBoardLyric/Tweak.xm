@@ -11,7 +11,8 @@ iPhone X      375*812    44                  34
 iPhone XS Max 414*896    44                  34
 */
 
-static int isEnabled;
+static int isLyricEnabled;
+static int isLockScreenEnabled ;
 static CGFloat LYRIC_Y;  
 static NSMutableDictionary *settings;
 static bool TranslateOrRoma = 1;
@@ -20,6 +21,10 @@ static bool isMusicOn =0;
 NSUserDefaults *defaults;
 MRYIPCCenter* center;
 
+@interface UIWindow ()
+-(void)_setSecure:(BOOL)arg1 ;
+@end
+
 @interface SBApplication : NSObject
 @property (nonatomic,readonly) NSString * bundleIdentifier;                                                                                   
 @end
@@ -27,6 +32,7 @@ MRYIPCCenter* center;
 @interface SBMediaController : NSObject
 @property (nonatomic, weak,readonly) SBApplication * nowPlayingApplication;
 +(id)sharedInstance;
+-(BOOL)isPlaying;
 @end
 
 @interface UIApplication ()
@@ -99,6 +105,9 @@ MRYIPCCenter* center;
     [LyricWindow addGestureRecognizer: tapGesture];
     [LyricWindow addGestureRecognizer: doubletapGesture];
     [LyricWindow addGestureRecognizer: holdGesture];
+
+    //show in lockscreen
+    [LyricWindow _setSecure:1];
    }
    return self;
 }
@@ -219,11 +228,33 @@ static void updateLyricFrame() {
 }
 
 
+
+
+@interface SBLockScreenManager
++(instancetype)sharedInstance;
+-(void)_wakeScreenForTapToWake;
+@end
+
+%hook SBLockHardwareButtonActions
+-(void)performSinglePressAction{
+
+    %orig;
+    
+    if(isLockScreenEnabled && isMusicOn && [[%c(SBMediaController) sharedInstance] isPlaying]){
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [[%c(SBLockScreenManager) sharedInstance] _wakeScreenForTapToWake];
+        });
+    }
+    
+}
+%end
+
 %ctor{
     settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/mlyx.neteaselyricsetting.plist"];
-    isEnabled = settings[@"isEnabled"] ? [settings[@"isEnabled"] boolValue] : 1;    
-    
-    if(isEnabled){
+    isLyricEnabled = settings[@"isLyricEnabled"] ? [settings[@"isLyricEnabled"] boolValue] : 1;    
+    isLockScreenEnabled = settings[@"isLockScreenEnabled"] ? [settings[@"isLockScreenEnabled"] boolValue] : 0; 
+
+    if(isLyricEnabled){
         %init;
         CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)updateLyricFrame, CFSTR("mlyx.neteaselyricsetting/Y-AxisChanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
     }
