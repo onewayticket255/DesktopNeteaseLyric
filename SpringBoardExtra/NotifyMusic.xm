@@ -75,7 +75,7 @@ BBServer *bbServer;
 				NSString *bundleId= [[[%c(SBMediaController) sharedInstance] nowPlayingApplication] bundleIdentifier];
 
 
-				BBBulletin *bulletin = [[%c(BBBulletin) alloc] init];
+				BBBulletin *bulletin = [%c(BBBulletin) new];
    
 				bulletin.title = title;
 				bulletin.message = message;

@@ -1,5 +1,19 @@
+@interface SBApplication : NSObject
+@property (nonatomic,readonly) NSString * displayName; 
+@end
+
+@interface SBMediaController : NSObject
+@property (nonatomic, weak,readonly) SBApplication * nowPlayingApplication;
++(id)sharedInstance;
+@end
+
 @interface MediaControlsHeaderView : UIView 
-@property (nonatomic,retain) UIView* routingButton;  
+@property (nonatomic,retain) UIView* routingButton; 
+-(id)routeLabel; 
+//@property (nonatomic,retain) MPRouteLabel* routeLabel;  
+@end
+
+@interface MPRouteLabel : UIView 
 @end
 
 @interface MRPlatterViewController : UIViewController
@@ -32,9 +46,13 @@
             [[[self nowPlayingHeaderView] routingButton] removeFromSuperview];
             [[self parentContainerView] removeFromSuperview];
             [[self volumeContainerView] removeFromSuperview];
+
+            [[[[self nowPlayingHeaderView] routeLabel] titleLabel] setText:[[[%c(SBMediaController) sharedInstance] nowPlayingApplication] displayName]];
     }
 }
 %end
+
+
 
 %hook CSAdjunctItemView
 // CSAdjunctItemView  LC Music Widget

@@ -241,12 +241,20 @@ static void updateLyricFrame() {
     %orig;
     
     if(isLockScreenEnabled && isMusicOn && [[%c(SBMediaController) sharedInstance] isPlaying]){
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             [[%c(SBLockScreenManager) sharedInstance] _wakeScreenForTapToWake];
         });
     }
     
 }
+%end
+
+%hook SBDashBoardIdleTimerProvider
+
+- (BOOL)isIdleTimerEnabled {
+  return isLockScreenEnabled && isMusicOn && [[%c(SBMediaController) sharedInstance] isPlaying]?0:%orig;
+}
+
 %end
 
 %ctor{

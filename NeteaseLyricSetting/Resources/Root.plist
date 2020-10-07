@@ -8,7 +8,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Show Lyric</string>
+			<string>Enable Lyric</string>
 		</dict>
 
 		<dict>
@@ -21,7 +21,7 @@
 			<key>key</key>
 			<string>isLyricEnabled</string>
 			<key>label</key>
-			<string>Enable Lyric in SpringBoard</string>
+			<string>SpringBoard</string>
 		</dict>
 
 		
@@ -35,7 +35,7 @@
 			<key>key</key>
 			<string>isLockScreenEnabled</string>
 			<key>label</key>
-			<string>Show Lyric in LockScreen(beta)</string>
+			<string>LockScreen[Always On]</string>
 		</dict>
 		
 		<dict>
