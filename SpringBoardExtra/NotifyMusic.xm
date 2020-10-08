@@ -1,16 +1,32 @@
-#import <dlfcn.h>
 #import "MediaRemote.h"
 #import "BulletinBoard.h"
 
 NSString *cachedSongName;
 
+struct SBIconImageInfo {
+    CGSize size;
+    CGFloat scale;
+    CGFloat continuousCornerRadius;
+};
+
 @interface SBApplication : NSObject
-@property (nonatomic,readonly) NSString * bundleIdentifier;                                                                                   
+@property (nonatomic,readonly) NSString * bundleIdentifier;   
+@property (nonatomic,readonly) NSString * displayName;                                                                                 
 @end
 
 @interface SBMediaController : NSObject
 @property (nonatomic, weak,readonly) SBApplication * nowPlayingApplication;
 +(id)sharedInstance;
+@end
+
+@interface SBApplicationIcon : NSObject
+-(id)initWithApplication:(SBApplication*)arg1 ;
+-(id)unmaskedIconImageWithInfo:(struct SBIconImageInfo)arg1;
+@end
+
+@interface SBApplicationController : NSObject
++(id)sharedInstance;
+-(id)applicationWithBundleIdentifier:(id)arg1;
 @end
 
 
@@ -23,27 +39,6 @@ BBServer *bbServer;
 		bbServer = %orig;
 		return bbServer;
 	}
-
-	%end
-
-	%hook BBBulletin
-	- (BBSectionIcon*)sectionIcon {
-		id r = %orig;
-		BBSectionIcon *icon = [BBSectionIcon new];
-		if ([self.publisherBulletinID isEqualToString:@"mlyx-netease"]){
-			[icon addVariant:[BBSectionIconVariant variantWithFormat:0 imageName: @"icon-netease" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/NeteaseLyricSetting.bundle"]]];
-		    return icon;
-		}else if([self.publisherBulletinID isEqualToString:@"mlyx-qqmusic"]){
-			[icon addVariant:[BBSectionIconVariant variantWithFormat:0 imageName: @"icon-qqmusic" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/NeteaseLyricSetting.bundle"]]];
-		    return icon;
-		}else if([self.publisherBulletinID isEqualToString:@"mlyx-spotify"]){
-			[icon addVariant:[BBSectionIconVariant variantWithFormat:0 imageName: @"icon-spotify" inBundle:[NSBundle bundleWithPath:@"/Library/PreferenceBundles/NeteaseLyricSetting.bundle"]]];
-		    return icon;
-		}else{
-			return r;
-		}		
-	}
-
 
 	%end
 %end
@@ -66,17 +61,27 @@ BBServer *bbServer;
 				NSString *title = [dict objectForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoTitle];
 				NSString *artist = [dict objectForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoArtist];
 				NSString *album = [dict objectForKey:(__bridge NSString *)kMRMediaRemoteNowPlayingInfoAlbum];
-
-				if([title isEqualToString:cachedSongName]) return;
+                NSString *bundleId= [[[%c(SBMediaController) sharedInstance] nowPlayingApplication] bundleIdentifier];
+				
+				
+				if(!title||[title isEqualToString:cachedSongName]) return;
 				
 				cachedSongName = title;
+                
+				NSString  *message;
 
-				NSString  *message = [NSString stringWithFormat: @"%@\n%@", artist, album];
-				NSString *bundleId= [[[%c(SBMediaController) sharedInstance] nowPlayingApplication] bundleIdentifier];
+				if(artist&&!album){
+					message = artist;
+				}
 
-
+				if(artist&&album){
+					message = [NSString stringWithFormat: @"%@\n%@", artist, album];
+				}
+				
+				
 				BBBulletin *bulletin = [%c(BBBulletin) new];
    
+                bulletin.header = [[[%c(SBMediaController) sharedInstance] nowPlayingApplication] displayName];
 				bulletin.title = title;
 				bulletin.message = message;
 				//sectionID 必须是apple原生应用 通知才会显示，不懂为什么
@@ -88,26 +93,23 @@ BBServer *bbServer;
 				bulletin.defaultAction = [%c(BBAction) actionWithLaunchBundleID:bundleId callblock: nil];
 				
 
-				if ([bundleId isEqualToString:@"com.netease.cloudmusic"]){
-					bulletin.publisherBulletinID = @"mlyx-netease";
-					bulletin.header = @"Netease Music";
-				}
 
-				if([bundleId isEqualToString:@"com.tencent.QQMusic"]){
-					bulletin.publisherBulletinID = @"mlyx-qqmusic";
-					bulletin.header = @"QQ Music";
-				}
+                BBSectionIcon *icon = [BBSectionIcon new];
+			    SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:bundleId];
+				SBApplicationIcon *appIcon = [[%c(SBApplicationIcon) alloc] initWithApplication: app];
+
+				struct SBIconImageInfo iconInfo;
+    
+				iconInfo.size = CGSizeMake(128, 128);
+				iconInfo.scale = 2.0;
+				iconInfo.continuousCornerRadius = 0;
+
+		        UIImage *tmpIcon = [appIcon unmaskedIconImageWithInfo:iconInfo];
+			    [icon addVariant:[BBSectionIconVariant variantWithFormat:0 imageData:UIImagePNGRepresentation(tmpIcon)]];
+			
+			    bulletin.icon=icon;
 				
-				if([bundleId isEqualToString:@"com.spotify.client"]){
-					bulletin.publisherBulletinID = @"mlyx-spotify";
-					bulletin.header = @"Spotify";
-				}
-
-				
-
-
-				if(bbServer && [bbServer respondsToSelector: @selector(publishBulletin:destinations:)])
-				{
+				if(bbServer){
 					dispatch_sync(__BBServerQueue, 
 					^{  
 						//4: lockscreen
@@ -145,8 +147,7 @@ BBServer *bbServer;
 			bulletin.turnsOnDisplay = YES;
 			bulletin.defaultAction = [%c(BBAction) actionWithLaunchBundleID: bulletin.sectionID callblock: nil];
 
-			if(bbServer && [bbServer respondsToSelector: @selector(publishBulletin:destinations:)])
-			{
+			if(bbServer){
 				dispatch_sync(__BBServerQueue, 
 				^{
 					[bbServer publishBulletin: bulletin destinations: 14];

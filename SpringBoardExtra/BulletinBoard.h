@@ -8,7 +8,13 @@ extern dispatch_queue_t __BBServerQueue;
 + (id)actionWithLaunchBundleID:(id)arg1 callblock:(id)arg2;
 @end
 
+
+@interface BBSectionIcon : NSObject
+-(void)addVariant:(id)variant;
+@end
+
 @interface BBBulletin : NSObject
+@property (nonatomic,retain) BBSectionIcon * icon;
 @property (nonatomic,copy) NSString *header;  
 @property(copy, nonatomic) NSString *title;
 @property(copy, nonatomic) NSString *message;
@@ -22,10 +28,8 @@ extern dispatch_queue_t __BBServerQueue;
 @property(copy, nonatomic) id defaultAction;
 @end
 
-@interface BBSectionIcon : NSObject
--(void)addVariant:(id)variant;
-@end
 
 @interface BBSectionIconVariant: NSObject
-+ (id)variantWithFormat:(long long)arg1 imageName:(id)arg2 inBundle:(id)arg3;
++(id)variantWithFormat:(long long)arg1 imageData:(id)arg2 ;
++(id)variantWithFormat:(long long)arg1 imageName:(id)arg2 inBundle:(id)arg3;
 @end
