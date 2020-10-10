@@ -11,7 +11,7 @@ struct SBIconImageInfo {
 
 @interface SBApplication : NSObject
 @property (nonatomic,readonly) NSString * bundleIdentifier;   
-@property (nonatomic,readonly) NSString * displayName;                                                                                 
+@property (nonatomic,readonly) NSString * displayName;                                                                                
 @end
 
 @interface SBMediaController : NSObject

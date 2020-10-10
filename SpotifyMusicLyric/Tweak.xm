@@ -1,4 +1,5 @@
 //Recommend Spotify Area: India
+
 #import <MRYIPCCenter.h>
 
 MRYIPCCenter* center = [MRYIPCCenter centerNamed:@"mlyx.neteasemusiclyric"];
@@ -17,6 +18,11 @@ MRYIPCCenter* center = [MRYIPCCenter centerNamed:@"mlyx.neteasemusiclyric"];
 @property(retain, nonatomic) SPTLyricsLineSet *lyricsLineSet;
 @end
 
+
+/*
+This hook method requires Spotify always in Foreground
+Details: /SpringBoardExtra/SpotifyForeground.xm
+*/
 %hook SPTLyricsV2LyricsViewController
 
 -(void)setLineIndex:(long long)arg1 {
@@ -30,8 +36,7 @@ MRYIPCCenter* center = [MRYIPCCenter centerNamed:@"mlyx.neteasemusiclyric"];
 
 	    NSDictionary *info = @{@"lrc_origin" : lyric.text, @"lrc_translate" : @"", @"lrc_romaji" : @""};
 	    [center callExternalMethod:@selector(_updateLyric:) withArguments:info];
-	}
-    
+	}    
 }
 
 %end

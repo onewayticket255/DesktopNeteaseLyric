@@ -14,7 +14,7 @@ SUBPROJECTS += NeteaseMusicLyric
 SUBPROJECTS += QQMusicLyric
 SUBPROJECTS += CleanNeteaseMusic
 SUBPROJECTS += CleanQQMusic
-SUBPROJECTS += NeteaseLyricSetting
 SUBPROJECTS += SpringBoardExtra
 SUBPROJECTS += SpringBoardLyric
+SUBPROJECTS += NeteaseLyricSetting
 include $(THEOS_MAKE_PATH)/aggregate.mk
