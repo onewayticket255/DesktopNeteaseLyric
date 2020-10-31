@@ -4,12 +4,7 @@
 <dict>
 	<key>items</key>
 	<array>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Enable Lyric</string>
-		</dict>
+
 
 		<dict>
 			<key>cell</key>
@@ -21,21 +16,7 @@
 			<key>key</key>
 			<string>isLyricEnabled</string>
 			<key>label</key>
-			<string>SpringBoard</string>
-		</dict>
-
-		
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>mlyx.neteaselyricsetting</string>
-			<key>key</key>
-			<string>isLockScreenEnabled</string>
-			<key>label</key>
-			<string>LockScreen[Always On]</string>
+			<string>Enable</string>
 		</dict>
 		
 		<dict>
@@ -114,45 +95,6 @@
 			<string>SpringBoard Extra</string>
 		</dict>
 
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>mlyx.neteaselyricsetting</string>
-			<key>key</key>
-			<string>isCCArtworkEnabled</string>
-			<key>label</key>
-			<string>CCArtwork</string>
-		</dict>
-
-
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>mlyx.neteaselyricsetting</string>
-			<key>key</key>
-			<string>isMusicBeQuietEnabled</string>
-			<key>label</key>
-			<string>MusicBeQuiet</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>mlyx.neteaselyricsetting</string>
-			<key>key</key>
-			<string>isQuitAllEnabled</string>
-			<key>label</key>
-			<string>QuitAll</string>
-		</dict>
 
 		<dict>
 			<key>cell</key>
@@ -175,9 +117,23 @@
 			<key>defaults</key>
 			<string>mlyx.neteaselyricsetting</string>
 			<key>key</key>
-			<string>isCompactMediaPlayerEnabled</string>
+			<string>isCCArtworkEnabled</string>
 			<key>label</key>
-			<string>CompactMediaPlayer</string>
+			<string>Music Artwork on ControlCenter</string>
+		</dict>
+
+
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>mlyx.neteaselyricsetting</string>
+			<key>key</key>
+			<string>isMusicBeQuietEnabled</string>
+			<key>label</key>
+			<string>Pause Music When Volume=0</string>
 		</dict>
 
 		<dict>
@@ -188,9 +144,9 @@
 			<key>defaults</key>
 			<string>mlyx.neteaselyricsetting</string>
 			<key>key</key>
-			<string>isDarkLaunchScreenEnabled</string>
+			<string>isCompactMediaPlayerEnabled</string>
 			<key>label</key>
-			<string>DarkLaunchScreen</string>
+			<string>Compact LockScreen MediaPlayer</string>
 		</dict>
 
 		<dict>
@@ -203,7 +159,7 @@
 			<key>key</key>
 			<string>isBluetoothLaunchEnabled</string>
 			<key>label</key>
-			<string>BluetoothLaunch</string>
+			<string>NeteaseFM When Airpods Connect</string>
 		</dict>
 
 		<dict>
@@ -216,22 +172,31 @@
 			<key>key</key>
 			<string>isNotifyMusicEnabled</string>
 			<key>label</key>
-			<string>NotifyMusic</string>
+			<string>Notify When Audio Change</string>
 		</dict>
 
-		
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Experimental</string>
+		</dict>
+
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
-			<true/>
+			<false/>
 			<key>defaults</key>
 			<string>mlyx.neteaselyricsetting</string>
 			<key>key</key>
-			<string>isLowBatteryNotificationEnabled</string>
+			<string>isLockScreenEnabled</string>
 			<key>label</key>
-			<string>LowBatteryNotification</string>
+			<string>LockScreen Always On</string>
 		</dict>
+
+
 
 		<dict>
 			<key>cell</key>

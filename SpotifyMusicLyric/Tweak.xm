@@ -13,30 +13,35 @@ MRYIPCCenter* center = [MRYIPCCenter centerNamed:@"mlyx.neteasemusiclyric"];
 @property(readonly, copy, nonatomic) NSArray *lyricLines; 
 @end
 
-@interface SPTLyricsV2LyricsViewController
-@property(nonatomic) long long lineIndex; 
+@interface SPTLyricsV2LyricsSyllableProgressManager
+@property(nonatomic) long long activeLineIndex;
 @property(retain, nonatomic) SPTLyricsLineSet *lyricsLineSet;
 @end
 
+%hook SPTLyricsV2LyricsSyllableProgressManager
 
-/*
-This hook method requires Spotify always in Foreground
-Details: /SpringBoardExtra/SpotifyForeground.xm
-*/
-%hook SPTLyricsV2LyricsViewController
-
--(void)setLineIndex:(long long)arg1 {
+-(void)setActiveLineIndex:(long long)arg1 {
     %orig;
-	if(arg1>=0){
-		NSLog(@"mlyx SpotifyLyricsIndex %lld",arg1);
+
+    if(arg1>=0){
+		NSLog(@"mlyxshi SpotifyLyricsIndex %lld",arg1);
 		SPTLyricsLineSet *lyricsLineSet = self.lyricsLineSet;
 		NSArray *lyricLines =lyricsLineSet.lyricLines;
 		SPTLyricsLine *lyric =lyricLines[arg1];
-		NSLog(@"mlyx SpotifyLyrics %@",lyric.text);
+		NSLog(@"mlyxshi SpotifyLyrics %@",lyric.text);
 
-	    NSDictionary *info = @{@"lrc_origin" : lyric.text, @"lrc_translate" : @"", @"lrc_romaji" : @""};
-	    [center callExternalMethod:@selector(_updateLyric:) withArguments:info];
-	}    
+		NSDictionary *info = @{@"lrc_origin" : lyric.text, @"lrc_translate" : @"", @"lrc_romaji" : @""};
+		[center callExternalMethod:@selector(_updateLyric:) withArguments:info];
+	}else{
+		NSDictionary *info = @{@"lrc_origin" : @"", @"lrc_translate" : @"", @"lrc_romaji" : @""};
+		[center callExternalMethod:@selector(_updateLyric:) withArguments:info];
+
+	} 
+
+}
+
+-(void)applicationDidEnterBackground {
+
 }
 
 %end
