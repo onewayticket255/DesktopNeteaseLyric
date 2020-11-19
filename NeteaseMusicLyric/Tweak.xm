@@ -1,3 +1,4 @@
+#import <Foundation/Foundation.h>
 #import <MRYIPCCenter.h>
 
 MRYIPCCenter* center = [MRYIPCCenter centerNamed:@"mlyx.neteasemusiclyric"];

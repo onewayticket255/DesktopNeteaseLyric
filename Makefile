@@ -1,10 +1,6 @@
-export TARGET = iphone:latest:13
-
-ifeq ($(debug),0)
-	export ARCHS= arm64 arm64e
-else
-	export ARCHS= arm64 
-endif
+export TARGET = iphone:latest:14
+export ARCHS= arm64 
+export SYSROOT=$(THEOS)/sdks/iPhoneOS14.1.sdk
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 

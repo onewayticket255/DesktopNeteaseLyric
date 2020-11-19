@@ -1,3 +1,4 @@
+#import <UIKit/UIKit.h>
 //仅去除部分vip也无法去除的广告
 @interface QMRootTabBarItem:UIView
 @property(copy, nonatomic) NSString *title;

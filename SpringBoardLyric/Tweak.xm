@@ -2,6 +2,7 @@
 #define DEVICE_HEIGHT  [[UIScreen mainScreen] bounds].size.height
 #define LYRIC_WIDTH  34 //iPhone X,iPhone XS safe-area-inset-bottom
 
+#import <UIKit/UIKit.h>
 #import "MediaRemote.h"
 #import <MRYIPCCenter.h>
 

@@ -1,3 +1,4 @@
+#import <Foundation/Foundation.h>
 @interface SBVolumeControl : NSObject
 - (float)_effectiveVolume;
 @end

@@ -1,3 +1,4 @@
+#import <UIKit/UIKit.h>
 #import "MediaRemote.h"
 #import "BulletinBoard.h"
 
@@ -83,14 +84,13 @@ BBServer *bbServer;
 				message = [NSString stringWithFormat: @"%@\n%@", artist, album];
 			}
 			
-			
 			BBBulletin *bulletin = [%c(BBBulletin) new];
 
 			bulletin.header = [[[%c(SBMediaController) sharedInstance] nowPlayingApplication] displayName];
 			bulletin.title = title;
 			bulletin.message = message;
 			//sectionID 必须是apple原生应用 通知才会显示，不懂为什么
-			bulletin.sectionID = @"com.apple.Music";
+			bulletin.sectionID = @"com.apple.Preferences";
 			bulletin.bulletinID = [[NSProcessInfo processInfo] globallyUniqueString];
 			bulletin.recordID = [[NSProcessInfo processInfo] globallyUniqueString];
 			bulletin.date = [NSDate date];

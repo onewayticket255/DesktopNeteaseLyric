@@ -1,11 +1,11 @@
 Package: mlyx.neteasespringboardlyric
 Name: MusicLyric
-Version: 1.6.2
+Version: 1.7.0
 Architecture: iphoneos-arm
 Description: NeteaseMusic && QQMusic && Spotify Lyric in HomeScreen
 Maintainer: mlyx
 Author: mlyx
 Section: Tweaks
-Depends: mobilesubstrate,com.muirey03.libmryipc,firmware(>=13.0)
+Depends: mobilesubstrate,com.muirey03.libmryipc,firmware(>=14.0)
 
 

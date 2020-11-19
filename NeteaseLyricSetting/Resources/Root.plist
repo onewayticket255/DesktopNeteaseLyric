@@ -109,19 +109,6 @@
 			<string>CleanSpringBoard</string>
 		</dict>
 
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>mlyx.neteaselyricsetting</string>
-			<key>key</key>
-			<string>isCCArtworkEnabled</string>
-			<key>label</key>
-			<string>Music Artwork on ControlCenter</string>
-		</dict>
-
 
 		<dict>
 			<key>cell</key>
@@ -134,32 +121,6 @@
 			<string>isMusicBeQuietEnabled</string>
 			<key>label</key>
 			<string>Pause Music When Volume=0</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>mlyx.neteaselyricsetting</string>
-			<key>key</key>
-			<string>isCompactMediaPlayerEnabled</string>
-			<key>label</key>
-			<string>Compact LockScreen MediaPlayer</string>
-		</dict>
-
-		<dict>
-			<key>cell</key>
-			<string>PSSwitchCell</string>
-			<key>default</key>
-			<true/>
-			<key>defaults</key>
-			<string>mlyx.neteaselyricsetting</string>
-			<key>key</key>
-			<string>isBluetoothLaunchEnabled</string>
-			<key>label</key>
-			<string>NeteaseFM When Airpods Connect</string>
 		</dict>
 
 		<dict>
